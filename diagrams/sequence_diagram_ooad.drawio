@@ -1,0 +1,220 @@
+<mxfile host="app.diagrams.net" agent="SmartEquipmentRental-SequenceDiagram">
+  <diagram id="sequence-diagram" name="Sequence Diagram">
+    <mxGraphModel dx="3431" dy="1823" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2400" pageHeight="2000" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=22;fontStyle=1" value="Smart Equipment Rental - Sequence Diagram: Place Rental Order" vertex="1">
+          <mxGeometry height="40" width="1200" x="600" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="actor_customer" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=14;fontStyle=1" value="Customer" vertex="1">
+          <mxGeometry height="60" width="40" x="120" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="lifeline_customer" parent="1" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;verticalAlign&quot;:&quot;middle&quot;,&quot;curveStyle&quot;:&quot;orthogonalEdgeStyle&quot;}" value="" vertex="1">
+          <mxGeometry height="1700" width="14" x="133" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="ui_obj" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=13;fontStyle=1" value=":RentalUI" vertex="1">
+          <mxGeometry height="60" width="140" x="280" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="lifeline_ui" parent="1" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;verticalAlign&quot;:&quot;middle&quot;,&quot;curveStyle&quot;:&quot;orthogonalEdgeStyle&quot;}" value="" vertex="1">
+          <mxGeometry height="1700" width="14" x="343" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="controller_obj" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=13;fontStyle=1" value=":RentalController" vertex="1">
+          <mxGeometry height="60" width="180" x="480" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="lifeline_controller" parent="1" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;verticalAlign&quot;:&quot;middle&quot;,&quot;curveStyle&quot;:&quot;orthogonalEdgeStyle&quot;}" value="" vertex="1">
+          <mxGeometry height="1700" width="14" x="563" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="equip_obj" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=13;fontStyle=1" value=":EquipmentService" vertex="1">
+          <mxGeometry height="60" width="180" x="720" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="lifeline_equip" parent="1" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;verticalAlign&quot;:&quot;middle&quot;,&quot;curveStyle&quot;:&quot;orthogonalEdgeStyle&quot;}" value="" vertex="1">
+          <mxGeometry height="1700" width="14" x="803" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="booking_obj" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=13;fontStyle=1" value=":BookingService" vertex="1">
+          <mxGeometry height="60" width="180" x="960" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="lifeline_booking" parent="1" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;verticalAlign&quot;:&quot;middle&quot;,&quot;curveStyle&quot;:&quot;orthogonalEdgeStyle&quot;}" value="" vertex="1">
+          <mxGeometry height="1700" width="14" x="1043" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="payment_obj" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=13;fontStyle=1" value=":PaymentService" vertex="1">
+          <mxGeometry height="60" width="180" x="1200" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="lifeline_payment" parent="1" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;verticalAlign&quot;:&quot;middle&quot;,&quot;curveStyle&quot;:&quot;orthogonalEdgeStyle&quot;}" value="" vertex="1">
+          <mxGeometry height="1700" width="14" x="1283" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="invoice_obj" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=13;fontStyle=1" value=":InvoiceService" vertex="1">
+          <mxGeometry height="60" width="180" x="1440" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="lifeline_invoice" parent="1" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;verticalAlign&quot;:&quot;middle&quot;,&quot;curveStyle&quot;:&quot;orthogonalEdgeStyle&quot;}" value="" vertex="1">
+          <mxGeometry height="1700" width="14" x="1523" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="db_obj" parent="1" style="shape=umlDatabase;whiteSpace=wrap;html=1;fontSize=13;fontStyle=1" value=":Database" vertex="1">
+          <mxGeometry height="60" width="140" x="1680" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="lifeline_db" parent="1" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;verticalAlign&quot;:&quot;middle&quot;,&quot;curveStyle&quot;:&quot;orthogonalEdgeStyle&quot;}" value="" vertex="1">
+          <mxGeometry height="1700" width="14" x="1743" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="msg1" edge="1" parent="1" source="lifeline_customer" style="html=1;verticalAlign=bottom;endArrow=block;endFill=1;rounded=0;fontSize=12" target="lifeline_ui" value="1: browseEquipment()">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="240" y="230" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg2" edge="1" parent="1" source="lifeline_ui" style="html=1;verticalAlign=bottom;endArrow=block;endFill=1;rounded=0;fontSize=12" target="lifeline_controller" value="2: searchAvailable(category, dateRange)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg3" edge="1" parent="1" source="lifeline_controller" style="html=1;verticalAlign=bottom;endArrow=block;endFill=1;rounded=0;fontSize=12" target="lifeline_equip" value="3: findAvailable(category, dateRange)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg4" edge="1" parent="1" source="lifeline_equip" style="html=1;verticalAlign=bottom;endArrow=block;endFill=1;rounded=0;fontSize=12" target="lifeline_db" value="4: queryAvailableEquipment()">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg5" edge="1" parent="1" source="lifeline_db" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;rounded=0;fontSize=12;dashed=1" target="lifeline_equip" value="5: equipment list">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg6" edge="1" parent="1" source="lifeline_equip" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;rounded=0;fontSize=12;dashed=1" target="lifeline_controller" value="6: availableEquipment[]">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg7" edge="1" parent="1" source="lifeline_controller" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;rounded=0;fontSize=12;dashed=1" target="lifeline_ui" value="7: display equipment list">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg8" edge="1" parent="1" source="lifeline_ui" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;rounded=0;fontSize=12;dashed=1" target="lifeline_customer" value="8: show catalog">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="240" y="500" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg9" edge="1" parent="1" source="lifeline_customer" style="html=1;verticalAlign=bottom;endArrow=block;endFill=1;rounded=0;fontSize=12" target="lifeline_ui" value="9: selectEquipment(equipmentId, startDate, endDate)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="240" y="560" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg10" edge="1" parent="1" source="lifeline_ui" style="html=1;verticalAlign=bottom;endArrow=block;endFill=1;rounded=0;fontSize=12" target="lifeline_controller" value="10: createRentalOrder(customerId, equipmentId, dates)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg11" edge="1" parent="1" source="lifeline_controller" style="html=1;verticalAlign=bottom;endArrow=block;endFill=1;rounded=0;fontSize=12" target="lifeline_booking" value="11: createBooking(order)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg12" edge="1" parent="1" source="lifeline_booking" style="html=1;verticalAlign=bottom;endArrow=block;endFill=1;rounded=0;fontSize=12" target="lifeline_booking" value="12: checkAvailability(equipmentId, dates)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1120" y="680" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg13" edge="1" parent="1" source="lifeline_booking" style="html=1;verticalAlign=bottom;endArrow=block;endFill=1;rounded=0;fontSize=12" target="lifeline_db" value="13: queryAvailability()">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg14" edge="1" parent="1" source="lifeline_db" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;rounded=0;fontSize=12;dashed=1" target="lifeline_booking" value="14: available = true">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg15" edge="1" parent="1" source="lifeline_booking" style="html=1;verticalAlign=bottom;endArrow=block;endFill=1;rounded=0;fontSize=12" target="lifeline_equip" value="15: calculateRentalCost(equipmentId, dates)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg16" edge="1" parent="1" source="lifeline_equip" style="html=1;verticalAlign=bottom;endArrow=block;endFill=1;rounded=0;fontSize=12" target="lifeline_db" value="16: getRate()">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg17" edge="1" parent="1" source="lifeline_db" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;rounded=0;fontSize=12;dashed=1" target="lifeline_equip" value="17: rate info">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg18" edge="1" parent="1" source="lifeline_equip" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;rounded=0;fontSize=12;dashed=1" target="lifeline_booking" value="18: rentalCost">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg19" edge="1" parent="1" source="lifeline_booking" style="html=1;verticalAlign=bottom;endArrow=block;endFill=1;rounded=0;fontSize=12" target="lifeline_db" value="19: saveRentalOrder(order)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg20" edge="1" parent="1" source="lifeline_db" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;rounded=0;fontSize=12;dashed=1" target="lifeline_booking" value="20: rentalOrder saved">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg21" edge="1" parent="1" source="lifeline_booking" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;rounded=0;fontSize=12;dashed=1" target="lifeline_controller" value="21: rentalOrder">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg22" edge="1" parent="1" source="lifeline_controller" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;rounded=0;fontSize=12;dashed=1" target="lifeline_ui" value="22: orderId, amountDue">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg23" edge="1" parent="1" source="lifeline_ui" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;rounded=0;fontSize=12;dashed=1" target="lifeline_customer" value="23: order summary">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="240" y="1100" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg24" edge="1" parent="1" source="lifeline_customer" style="html=1;verticalAlign=bottom;endArrow=block;endFill=1;rounded=0;fontSize=12" target="lifeline_ui" value="24: confirmPayment(orderId, paymentMethod)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="240" y="1160" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg25" edge="1" parent="1" source="lifeline_ui" style="html=1;verticalAlign=bottom;endArrow=block;endFill=1;rounded=0;fontSize=12" target="lifeline_controller" value="25: processPayment(orderId, amount)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg26" edge="1" parent="1" source="lifeline_controller" style="html=1;verticalAlign=bottom;endArrow=block;endFill=1;rounded=0;fontSize=12" target="lifeline_payment" value="26: chargePayment(orderId, amount)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg27" edge="1" parent="1" source="lifeline_payment" style="html=1;verticalAlign=bottom;endArrow=block;endFill=1;rounded=0;fontSize=12" target="lifeline_payment" value="27: validateCard(paymentInfo)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1360" y="1280" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg28" edge="1" parent="1" source="lifeline_payment" style="html=1;verticalAlign=bottom;endArrow=block;endFill=1;rounded=0;fontSize=12" target="lifeline_db" value="28: recordTransaction(orderId, status)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg29" edge="1" parent="1" source="lifeline_db" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;rounded=0;fontSize=12;dashed=1" target="lifeline_payment" value="29: transactionId">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg30" edge="1" parent="1" source="lifeline_payment" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;rounded=0;fontSize=12;dashed=1" target="lifeline_controller" value="30: paymentResult(success)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg31" edge="1" parent="1" source="lifeline_controller" style="html=1;verticalAlign=bottom;endArrow=block;endFill=1;rounded=0;fontSize=12" target="lifeline_booking" value="31: confirmBooking(orderId)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg32" edge="1" parent="1" source="lifeline_booking" style="html=1;verticalAlign=bottom;endArrow=block;endFill=1;rounded=0;fontSize=12" target="lifeline_db" value="32: updateStatus(orderId, CONFIRMED)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg33" edge="1" parent="1" source="lifeline_db" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;rounded=0;fontSize=12;dashed=1" target="lifeline_booking" value="33: status updated">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg34" edge="1" parent="1" source="lifeline_booking" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;rounded=0;fontSize=12;dashed=1" target="lifeline_controller" value="34: booking confirmed">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg35" edge="1" parent="1" source="lifeline_controller" style="html=1;verticalAlign=bottom;endArrow=block;endFill=1;rounded=0;fontSize=12" target="lifeline_invoice" value="35: generateInvoice(orderId)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg36" edge="1" parent="1" source="lifeline_invoice" style="html=1;verticalAlign=bottom;endArrow=block;endFill=1;rounded=0;fontSize=12" target="lifeline_invoice" value="36: createInvoice(order, payment)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1600" y="1580" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg37" edge="1" parent="1" source="lifeline_invoice" style="html=1;verticalAlign=bottom;endArrow=block;endFill=1;rounded=0;fontSize=12" target="lifeline_db" value="37: saveInvoice(invoice)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg38" edge="1" parent="1" source="lifeline_db" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;rounded=0;fontSize=12;dashed=1" target="lifeline_invoice" value="38: invoice saved">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg39" edge="1" parent="1" source="lifeline_invoice" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;rounded=0;fontSize=12;dashed=1" target="lifeline_controller" value="39: invoice">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg40" edge="1" parent="1" source="lifeline_controller" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;rounded=0;fontSize=12;dashed=1" target="lifeline_ui" value="40: invoice details">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg41" edge="1" parent="1" source="lifeline_ui" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;rounded=0;fontSize=12;dashed=1" target="lifeline_customer" value="41: order confirmed + invoice">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="240" y="1780" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

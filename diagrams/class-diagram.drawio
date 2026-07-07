@@ -1,0 +1,738 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" agent="SmartEquipmentRental-ClassDiagram" version="24.7.5">
+  <diagram id="class-diagram" name="Class Diagram">
+    <mxGraphModel dx="2400" dy="1600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2200" pageHeight="1700" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="title" value="Smart Equipment Rental &amp; Billing System - Class Diagram" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=22;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="700" y="20" width="800" height="40" as="geometry" />
+        </mxCell>
+
+        <mxCell id="pkg-model-user" value="model.user" style="shape=umlFrame;whiteSpace=wrap;html=1;width=120;height=40;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;align=left;verticalAlign=top;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="60" y="120" width="640" height="380" as="geometry" />
+        </mxCell>
+        <mxCell id="pkg-model-equipment" value="model.equipment" style="shape=umlFrame;whiteSpace=wrap;html=1;width=120;height=40;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;align=left;verticalAlign=top;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="740" y="120" width="540" height="500" as="geometry" />
+        </mxCell>
+        <mxCell id="pkg-model-pricing" value="model.pricing" style="shape=umlFrame;whiteSpace=wrap;html=1;width=120;height=40;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;align=left;verticalAlign=top;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="1320" y="120" width="540" height="500" as="geometry" />
+        </mxCell>
+        <mxCell id="pkg-model-rental" value="model.rental" style="shape=umlFrame;whiteSpace=wrap;html=1;width=120;height=40;fillColor=#e1d5e7;strokeColor=#9673a6;fontStyle=1;align=left;verticalAlign=top;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="60" y="540" width="500" height="320" as="geometry" />
+        </mxCell>
+        <mxCell id="pkg-model-billing" value="model.billing" style="shape=umlFrame;whiteSpace=wrap;html=1;width=120;height=40;fillColor=#f8cecc;strokeColor=#b85450;fontStyle=1;align=left;verticalAlign=top;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="600" y="540" width="420" height="240" as="geometry" />
+        </mxCell>
+        <mxCell id="pkg-repository" value="repository" style="shape=umlFrame;whiteSpace=wrap;html=1;width=120;height=40;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;align=left;verticalAlign=top;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="60" y="900" width="780" height="380" as="geometry" />
+        </mxCell>
+        <mxCell id="pkg-service" value="service" style="shape=umlFrame;whiteSpace=wrap;html=1;width=120;height=40;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;align=left;verticalAlign=top;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="880" y="900" width="520" height="380" as="geometry" />
+        </mxCell>
+        <mxCell id="pkg-security" value="security" style="shape=umlFrame;whiteSpace=wrap;html=1;width=120;height=40;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;align=left;verticalAlign=top;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="1440" y="900" width="320" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="pkg-db" value="db" style="shape=umlFrame;whiteSpace=wrap;html=1;width=120;height=40;fillColor=#e1d5e7;strokeColor=#9673a6;fontStyle=1;align=left;verticalAlign=top;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="1440" y="1120" width="320" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="pkg-gui" value="gui" style="shape=umlFrame;whiteSpace=wrap;html=1;width=120;height=40;fillColor=#f8cecc;strokeColor=#b85450;fontStyle=1;align=left;verticalAlign=top;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="60" y="1320" width="1700" height="360" as="geometry" />
+        </mxCell>
+
+        <mxCell id="User" value="&lt;&lt;abstract&gt;&gt;&#10;&lt;b&gt;User&lt;/b&gt;&#10;--------------------&#10;- userId : String&#10;- fullName : String&#10;- email : String&#10;- type : UserType&#10;- createdAt : LocalDateTime&#10;--------------------&#10;+ getDiscountRate() : double {abstract}&#10;+ isFinalYear() : boolean&#10;+ getUserId() : String&#10;+ getFullName() : String&#10;+ getEmail() : String&#10;+ getType() : UserType&#10;+ getCreatedAt() : LocalDateTime&#10;+ toString() : String" style="swimlane;fontStyle=1;align=left;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;html=1;collapsible=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="100" y="160" width="280" height="200" as="geometry" />
+        </mxCell>
+
+        <mxCell id="Student" value="&lt;b&gt;Student&lt;/b&gt;&#10;--------------------&#10;- NON_FINAL_YEAR_DISCOUNT : double = 0.00&#10;- FINAL_YEAR_DISCOUNT : double = 0.15&#10;- discountRate : double&#10;- isFinalYear : boolean&#10;--------------------&#10;+ Student(id, name, email, discount, fy, createdAt)&#10;+ getDiscountRate() : double&#10;+ isFinalYear() : boolean" style="swimlane;fontStyle=1;align=left;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;html=1;collapsible=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="100" y="380" width="280" height="120" as="geometry" />
+        </mxCell>
+
+        <mxCell id="Staff" value="&lt;b&gt;Staff&lt;/b&gt;&#10;--------------------&#10;- DEFAULT_DISCOUNT : double = 0.20&#10;- discountRate : double&#10;--------------------&#10;+ Staff(id, name, email, discount, createdAt)&#10;+ getDiscountRate() : double" style="swimlane;fontStyle=1;align=left;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;html=1;collapsible=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="420" y="380" width="240" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="AuthenticatedUser" value="&lt;b&gt;AuthenticatedUser&lt;/b&gt;&#10;--------------------&#10;- passwordHash : String&#10;- discountRate : double&#10;- isFinalYear : boolean&#10;--------------------&#10;+ AuthenticatedUser(...)&#10;+ passwordHash() : String&#10;+ getDiscountRate() : double&#10;+ isFinalYear() : boolean" style="swimlane;fontStyle=1;align=left;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;html=1;collapsible=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="420" y="160" width="240" height="160" as="geometry" />
+        </mxCell>
+
+        <mxCell id="UserType" value="&lt;&lt;enum&gt;&gt;&#10;&lt;b&gt;UserType&lt;/b&gt;&#10;--------------------&#10;STUDENT&#10;STAFF&#10;--------------------&#10;- displayName : String&#10;--------------------&#10;+ getDisplayName() : String" style="swimlane;fontStyle=1;align=left;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;html=1;collapsible=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="100" y="40" width="200" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="UserFactory" value="&lt;&lt;utility&gt;&gt;&#10;&lt;b&gt;UserFactory&lt;/b&gt;&#10;--------------------&#10;+ create(...) : User&#10;+ createWithCredentials(...) : AuthenticatedUser" style="swimlane;fontStyle=1;align=left;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;html=1;collapsible=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="320" y="40" width="240" height="80" as="geometry" />
+        </mxCell>
+
+        <mxCell id="EquipmentItem" value="&lt;&lt;abstract&gt;&gt;&#10;&lt;b&gt;EquipmentItem&lt;/b&gt;&#10;&lt;&lt;Bridge: Abstraction&gt;&gt;&#10;--------------------&#10;- equipmentId : String&#10;- name : String&#10;- category : EquipmentCategory&#10;- dailyRate : double&#10;- pricingPolicy : PricingPolicy&#10;- status : EquipmentStatus&#10;--------------------&#10;+ calculateBaseFee(days) : double&#10;+ calculateLatePenalty(daysLate) : double&#10;+ setPricingPolicy(policy) : void&#10;+ getCategoryLatePenaltyMultiplier() : double {abstract}&#10;+ getCategoryDisplayName() : String {abstract}&#10;+ isAvailable() : boolean" style="swimlane;fontStyle=1;align=left;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;html=1;collapsible=0;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="780" y="160" width="320" height="220" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ElectronicsItem" value="&lt;b&gt;ElectronicsItem&lt;/b&gt;&#10;--------------------&#10;- LATE_MULTIPLIER = 0.5&#10;--------------------&#10;+ getCategoryLatePenaltyMultiplier() : double&#10;+ getCategoryDisplayName() : String" style="swimlane;fontStyle=1;align=left;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;html=1;collapsible=0;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="760" y="400" width="260" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="MediaItem" value="&lt;b&gt;MediaItem&lt;/b&gt;&#10;--------------------&#10;- LATE_MULTIPLIER = 0.75&#10;--------------------&#10;+ getCategoryLatePenaltyMultiplier() : double&#10;+ getCategoryDisplayName() : String" style="swimlane;fontStyle=1;align=left;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;html=1;collapsible=0;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="400" width="220" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="LaboratoryItem" value="&lt;b&gt;LaboratoryItem&lt;/b&gt;&#10;--------------------&#10;- LATE_MULTIPLIER = 1.0&#10;--------------------&#10;+ getCategoryLatePenaltyMultiplier() : double&#10;+ getCategoryDisplayName() : String" style="swimlane;fontStyle=1;align=left;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;html=1;collapsible=0;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="900" y="520" width="260" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="EquipmentCategory" value="&lt;&lt;enum&gt;&gt;&#10;&lt;b&gt;EquipmentCategory&lt;/b&gt;&#10;--------------------&#10;ELECTRONICS&#10;MEDIA&#10;LABORATORY&#10;--------------------&#10;- displayName : String" style="swimlane;fontStyle=1;align=left;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;html=1;collapsible=0;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="780" y="40" width="200" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="EquipmentStatus" value="&lt;&lt;enum&gt;&gt;&#10;&lt;b&gt;EquipmentStatus&lt;/b&gt;&#10;--------------------&#10;AVAILABLE&#10;RENTED&#10;OVERDUE&#10;UNDER_MAINTENANCE" style="swimlane;fontStyle=1;align=left;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;html=1;collapsible=0;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="40" width="200" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="EquipmentItemFactory" value="&lt;&lt;utility&gt;&gt;&#10;&lt;b&gt;EquipmentItemFactory&lt;/b&gt;&#10;&lt;&lt;Abstract Factory&gt;&gt;&#10;--------------------&#10;+ create(...) : EquipmentItem" style="swimlane;fontStyle=1;align=left;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;html=1;collapsible=0;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="1220" y="40" width="240" height="80" as="geometry" />
+        </mxCell>
+
+        <mxCell id="PricingPolicy" value="&lt;&lt;interface&gt;&gt;&#10;&lt;b&gt;PricingPolicy&lt;/b&gt;&#10;&lt;&lt;Bridge: Implementor&gt;&gt;&#10;--------------------&#10;+ calculateBaseFee(rate, days) : double&#10;+ calculateLatePenalty(rate, daysLate) : double&#10;+ getPolicyName() : String&#10;+ getStrategyKey() : String" style="swimlane;fontStyle=1;align=left;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;html=1;collapsible=0;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="1360" y="160" width="280" height="140" as="geometry" />
+        </mxCell>
+
+        <mxCell id="StandardPricing" value="&lt;b&gt;StandardPricing&lt;/b&gt;&#10;--------------------&#10;- LATE_PENALTY_MULTIPLIER = 0.5&#10;--------------------&#10;+ calculateBaseFee(rate, days) : double&#10;+ calculateLatePenalty(rate, daysLate) : double&#10;+ getPolicyName() : String = &quot;Standard Pricing&quot;&#10;+ getStrategyKey() : String = &quot;STANDARD&quot;" style="swimlane;fontStyle=1;align=left;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;html=1;collapsible=0;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="1360" y="320" width="240" height="140" as="geometry" />
+        </mxCell>
+
+        <mxCell id="TieredPricing" value="&lt;b&gt;TieredPricing&lt;/b&gt;&#10;--------------------&#10;+ calculateBaseFee(rate, days) : double&#10;+ calculateLatePenalty(rate, daysLate) : double&#10;+ getPolicyName() : String = &quot;Tiered Pricing&quot;&#10;+ getStrategyKey() : String = &quot;TIERED&quot;" style="swimlane;fontStyle=1;align=left;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;html=1;collapsible=0;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="1620" y="320" width="220" height="140" as="geometry" />
+        </mxCell>
+
+        <mxCell id="PromotionalPricing" value="&lt;b&gt;PromotionalPricing&lt;/b&gt;&#10;--------------------&#10;- PROMO_DISCOUNT = 0.15&#10;+ calculateBaseFee(rate, days) : double&#10;+ calculateLatePenalty(rate, daysLate) : double&#10;+ getPolicyName() : String = &quot;Promotional Pricing&quot;&#10;+ getStrategyKey() : String = &quot;PROMOTIONAL&quot;" style="swimlane;fontStyle=1;align=left;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;html=1;collapsible=0;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="1360" y="480" width="240" height="140" as="geometry" />
+        </mxCell>
+
+        <mxCell id="PricingPolicyFactory" value="&lt;&lt;Singleton&gt;&gt;&#10;&lt;b&gt;PricingPolicyFactory&lt;/b&gt;&#10;--------------------&#10;- INSTANCE : PricingPolicyFactory&#10;- registry : Map&lt;String, PricingPolicy&gt;&#10;--------------------&#10;+ getInstance() : PricingPolicyFactory&#10;+ fromKey(key) : PricingPolicy&#10;+ all() : Map&lt;String, PricingPolicy&gt;" style="swimlane;fontStyle=1;align=left;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;html=1;collapsible=0;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="1620" y="160" width="240" height="140" as="geometry" />
+        </mxCell>
+
+        <mxCell id="Rental" value="&lt;b&gt;Rental&lt;/b&gt;&#10;--------------------&#10;- rentalId : int&#10;- userId : String&#10;- equipmentId : String&#10;- rentDate : LocalDate&#10;- dueDate : LocalDate&#10;- returnDate : LocalDate&#10;- damageLevel : DamageLevel&#10;- status : Status&#10;--------------------&#10;+ rentalDays() : int&#10;+ daysLate(asOf) : int&#10;+ setReturnDate(d) : void&#10;+ setDamageLevel(d) : void&#10;+ setStatus(s) : void" style="swimlane;fontStyle=1;align=left;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;html=1;collapsible=0;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="100" y="600" width="280" height="220" as="geometry" />
+        </mxCell>
+
+        <mxCell id="RentalStatus" value="&lt;&lt;enum&gt;&gt;&#10;&lt;b&gt;Rental.Status&lt;/b&gt;&#10;--------------------&#10;ACTIVE&#10;RETURNED&#10;OVERDUE&#10;CANCELLED" style="swimlane;fontStyle=1;align=left;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;html=1;collapsible=0;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="420" y="580" width="160" height="120" as="geometry" />
+        </mxCell>
+
+        <mxCell id="DamageLevel" value="&lt;&lt;enum&gt;&gt;&#10;&lt;b&gt;Rental.DamageLevel&lt;/b&gt;&#10;--------------------&#10;NONE (RM 0)&#10;LIGHT (RM 10)&#10;MODERATE (RM 100)&#10;HEAVY (RM 1000)&#10;--------------------&#10;+ getFee() : double&#10;+ parse(s) : DamageLevel" style="swimlane;fontStyle=1;align=left;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;html=1;collapsible=0;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="420" y="720" width="220" height="140" as="geometry" />
+        </mxCell>
+
+        <mxCell id="Bill" value="&lt;b&gt;Bill&lt;/b&gt;&#10;--------------------&#10;- billId : int&#10;- rentalId : int&#10;- baseRentalFee : double&#10;- discountAmount : double&#10;- penaltyAmount : double&#10;- netPayable : double&#10;- issuedAt : LocalDateTime&#10;--------------------&#10;+ getBillId() : int&#10;+ getRentalId() : int&#10;+ getBaseRentalFee() : double&#10;+ getDiscountAmount() : double&#10;+ getPenaltyAmount() : double&#10;+ getNetPayable() : double&#10;+ getIssuedAt() : LocalDateTime" style="swimlane;fontStyle=1;align=left;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;html=1;collapsible=0;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="640" y="600" width="340" height="180" as="geometry" />
+        </mxCell>
+
+        <mxCell id="UserRepository" value="&lt;b&gt;UserRepository&lt;/b&gt;&#10;--------------------&#10;+ findAll() : List&lt;User&gt;&#10;+ findById(id) : Optional&lt;User&gt;&#10;+ findByEmail(email) : Optional&lt;AuthenticatedUser&gt;&#10;+ insert(u) : User" style="swimlane;fontStyle=1;align=left;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;html=1;collapsible=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="100" y="940" width="320" height="120" as="geometry" />
+        </mxCell>
+
+        <mxCell id="EquipmentRepository" value="&lt;b&gt;EquipmentRepository&lt;/b&gt;&#10;--------------------&#10;+ findAll() : List&lt;EquipmentItem&gt;&#10;+ setAvailability(id, available) : void" style="swimlane;fontStyle=1;align=left;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;html=1;collapsible=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="100" y="1080" width="320" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="RentalRepository" value="&lt;b&gt;RentalRepository&lt;/b&gt;&#10;--------------------&#10;+ findAll() : List&lt;Rental&gt;&#10;+ findByUser(userId) : List&lt;Rental&gt;&#10;+ findActiveRentalForEquipment(equipmentId) : Optional&lt;Rental&gt;&#10;+ insert(r) : Rental&#10;+ markReturned(id, date, dmg, status) : void" style="swimlane;fontStyle=1;align=left;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;html=1;collapsible=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="460" y="940" width="360" height="140" as="geometry" />
+        </mxCell>
+
+        <mxCell id="BillRepository" value="&lt;b&gt;BillRepository&lt;/b&gt;&#10;--------------------&#10;+ findAll() : List&lt;Bill&gt;&#10;+ findByRentalId(rentalId) : Optional&lt;Bill&gt;&#10;+ insert(b) : Bill" style="swimlane;fontStyle=1;align=left;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;html=1;collapsible=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="460" y="1100" width="360" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="AuthService" value="&lt;b&gt;AuthService&lt;/b&gt;&#10;--------------------&#10;- userRepo : UserRepository&#10;--------------------&#10;+ login(email, password) : Optional&lt;User&gt;" style="swimlane;fontStyle=1;align=left;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;html=1;collapsible=0;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="900" y="940" width="220" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="RentalService" value="&lt;b&gt;RentalService&lt;/b&gt;&#10;--------------------&#10;- users : UserRepository&#10;- equipment : EquipmentRepository&#10;- rentals : RentalRepository&#10;--------------------&#10;+ rentEquipment(userId, equipId, rentDate, dueDate) : Rental" style="swimlane;fontStyle=1;align=left;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;html=1;collapsible=0;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="1140" y="940" width="240" height="120" as="geometry" />
+        </mxCell>
+
+        <mxCell id="BillingService" value="&lt;b&gt;BillingService&lt;/b&gt;&#10;--------------------&#10;- users : UserRepository&#10;- equipment : EquipmentRepository&#10;- rentals : RentalRepository&#10;- bills : BillRepository&#10;--------------------&#10;+ processReturn(rentalId, returnDate, dmg) : Bill&#10;+ calculateBill(user, item, rental, returnDate, dmg) : Bill" style="swimlane;fontStyle=1;align=left;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;html=1;collapsible=0;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="920" y="1080" width="460" height="140" as="geometry" />
+        </mxCell>
+
+        <mxCell id="PasswordHasher" value="&lt;&lt;utility&gt;&gt;&#10;&lt;b&gt;PasswordHasher&lt;/b&gt;&#10;&lt;&lt;PBKDF2-HMAC-SHA256&gt;&gt;&#10;--------------------&#10;+ hash(plain) : String&#10;+ hashWithSalt(plain, salt, iter) : String&#10;+ verify(plain, stored) : boolean" style="swimlane;fontStyle=1;align=left;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;html=1;collapsible=0;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="1460" y="940" width="280" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="DatabaseManager" value="&lt;&lt;Singleton&gt;&gt;&#10;&lt;b&gt;DatabaseManager&lt;/b&gt;&#10;--------------------&#10;- INSTANCE : DatabaseManager&#10;- config : DbConfig&#10;--------------------&#10;+ getInstance() : DatabaseManager&#10;+ getConnection() : Connection&#10;+ testConnection() : boolean&#10;+ close(AutoCloseable...) : void" style="swimlane;fontStyle=1;align=left;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;html=1;collapsible=0;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="1460" y="1160" width="280" height="140" as="geometry" />
+        </mxCell>
+
+        <mxCell id="DbConfig" value="&lt;b&gt;DbConfig&lt;/b&gt;&#10;--------------------&#10;- props : Properties&#10;--------------------&#10;+ host() : String&#10;+ port() : int&#10;+ database() : String&#10;+ user() : String&#10;+ password() : String&#10;+ useSSL() : boolean&#10;+ allowPublicKeyRetrieval() : boolean" style="swimlane;fontStyle=1;align=left;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;html=1;collapsible=0;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="1460" y="1320" width="280" height="160" as="geometry" />
+        </mxCell>
+
+        <mxCell id="Main" value="&lt;&lt;main&gt;&gt;&#10;&lt;b&gt;Main&lt;/b&gt;&#10;--------------------&#10;+ main(args) : void" style="swimlane;fontStyle=1;align=left;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;html=1;collapsible=0;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="100" y="1360" width="160" height="80" as="geometry" />
+        </mxCell>
+
+        <mxCell id="LoginFrame" value="&lt;b&gt;LoginFrame&lt;/b&gt;&#10;&lt;&lt;JFrame&gt;&gt;&#10;--------------------&#10;- emailField : JTextField&#10;- pwField : JPasswordField&#10;- auth : AuthService" style="swimlane;fontStyle=1;align=left;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;html=1;collapsible=0;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="100" y="1460" width="220" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="MainShell" value="&lt;b&gt;MainShell&lt;/b&gt;&#10;&lt;&lt;JFrame&gt;&gt;&#10;--------------------&#10;- currentUser : User&#10;- sidebar : SidebarPanel&#10;- equipmentPanel : EquipmentPanel&#10;- myRentalsPanel : MyRentalsPanel&#10;- returnPanel : ReturnPanel" style="swimlane;fontStyle=1;align=left;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;html=1;collapsible=0;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="340" y="1360" width="280" height="140" as="geometry" />
+        </mxCell>
+
+        <mxCell id="SidebarPanel" value="&lt;b&gt;SidebarPanel&lt;/b&gt;&#10;&lt;&lt;JPanel&gt;&gt;&#10;--------------------&#10;- listener : SidebarListener&#10;- activeButton : JButton" style="swimlane;fontStyle=1;align=left;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;html=1;collapsible=0;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="340" y="1520" width="220" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="EquipmentPanel" value="&lt;b&gt;EquipmentPanel&lt;/b&gt;&#10;&lt;&lt;JPanel&gt;&gt;&#10;--------------------&#10;- repo : EquipmentRepository&#10;- model : DefaultTableModel" style="swimlane;fontStyle=1;align=left;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;html=1;collapsible=0;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="640" y="1360" width="220" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="RentPanel" value="&lt;b&gt;RentPanel&lt;/b&gt;&#10;&lt;&lt;JPanel&gt;&gt;&#10;--------------------&#10;- currentUser : User&#10;- rentalService : RentalService" style="swimlane;fontStyle=1;align=left;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;html=1;collapsible=0;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="640" y="1480" width="220" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ReturnPanel" value="&lt;b&gt;ReturnPanel&lt;/b&gt;&#10;&lt;&lt;JPanel&gt;&gt;&#10;--------------------&#10;- userIdFilter : String&#10;- rentalRepo : RentalRepository&#10;- billingService : BillingService" style="swimlane;fontStyle=1;align=left;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;html=1;collapsible=0;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="880" y="1360" width="220" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="MyRentalsPanel" value="&lt;b&gt;MyRentalsPanel&lt;/b&gt;&#10;&lt;&lt;JPanel&gt;&gt;&#10;--------------------&#10;- userIdFilter : String&#10;- repo : RentalRepository&#10;- equipRepo : EquipmentRepository" style="swimlane;fontStyle=1;align=left;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;html=1;collapsible=0;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="880" y="1480" width="220" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ProfilePanel" value="&lt;b&gt;ProfilePanel&lt;/b&gt;&#10;&lt;&lt;JPanel&gt;&gt;" style="swimlane;fontStyle=1;align=left;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;html=1;collapsible=0;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="1120" y="1360" width="180" height="80" as="geometry" />
+        </mxCell>
+
+        <mxCell id="UsersPanel" value="&lt;b&gt;UsersPanel&lt;/b&gt;&#10;&lt;&lt;JPanel&gt;&gt;&#10;--------------------&#10;- repo : UserRepository" style="swimlane;fontStyle=1;align=left;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;html=1;collapsible=0;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="1120" y="1460" width="180" height="80" as="geometry" />
+        </mxCell>
+
+        <mxCell id="NewUserPanel" value="&lt;b&gt;NewUserPanel&lt;/b&gt;&#10;&lt;&lt;JPanel&gt;&gt;&#10;--------------------&#10;- repo : UserRepository" style="swimlane;fontStyle=1;align=left;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;html=1;collapsible=0;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="1120" y="1560" width="180" height="80" as="geometry" />
+        </mxCell>
+
+        <mxCell id="CreateUserDialog" value="&lt;b&gt;CreateUserDialog&lt;/b&gt;&#10;&lt;&lt;JDialog&gt;&gt;&#10;--------------------&#10;- form : NewUserPanel" style="swimlane;fontStyle=1;align=left;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;html=1;collapsible=0;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="1320" y="1460" width="200" height="80" as="geometry" />
+        </mxCell>
+
+        <mxCell id="StartupDialog" value="&lt;b&gt;StartupDialog&lt;/b&gt;&#10;&lt;&lt;JDialog&gt;&gt;" style="swimlane;fontStyle=1;align=left;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;html=1;collapsible=0;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="1320" y="1560" width="200" height="80" as="geometry" />
+        </mxCell>
+
+        <mxCell id="AboutPanel" value="&lt;b&gt;AboutPanel&lt;/b&gt;&#10;&lt;&lt;JPanel&gt;&gt;" style="swimlane;fontStyle=1;align=left;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;html=1;collapsible=0;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="1540" y="1360" width="180" height="80" as="geometry" />
+        </mxCell>
+
+        <mxCell id="DatePickerField" value="&lt;b&gt;DatePickerField&lt;/b&gt;&#10;&lt;&lt;JPanel&gt;&gt;" style="swimlane;fontStyle=1;align=left;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;html=1;collapsible=0;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="1540" y="1460" width="200" height="80" as="geometry" />
+        </mxCell>
+
+        <mxCell id="Theme" value="&lt;&lt;utility&gt;&gt;&#10;&lt;b&gt;Theme&lt;/b&gt;&#10;--------------------&#10;+ primaryButton(t) : JButton&#10;+ successButton(t) : JButton&#10;+ dangerButton(t) : JButton&#10;+ ghostButton(t) : JButton&#10;+ pageTitle(t) : JLabel" style="swimlane;fontStyle=1;align=left;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;html=1;collapsible=0;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="1540" y="1560" width="200" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="GuiUtil" value="&lt;&lt;utility&gt;&gt;&#10;&lt;b&gt;GuiUtil&lt;/b&gt;&#10;--------------------&#10;+ installNativeLookAndFeel()&#10;+ showError(parent, title, msg)&#10;+ showInfo(parent, title, msg)&#10;+ formatRM(value) : String" style="swimlane;fontStyle=1;align=left;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;html=1;collapsible=0;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="100" y="1580" width="220" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e_Student_User" value="" style="endArrow=block;endSize=16;endFill=0;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.25;entryY=1;entryDx=0;entryDy=0;strokeColor=#6c8ebf;" edge="1" parent="1" source="Student" target="User">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_Student_User" value="extends" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10" vertex="1" connectable="0" parent="e_Student_User">
+          <mxGeometry x="-0.2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="e_Staff_User" value="" style="endArrow=block;endSize=16;endFill=0;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.75;entryY=1;entryDx=0;entryDy=0;strokeColor=#6c8ebf;" edge="1" parent="1" source="Staff" target="User">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_Staff_User" value="extends" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10" vertex="1" connectable="0" parent="e_Staff_User">
+          <mxGeometry x="-0.2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="e_AuthUser_User" value="" style="endArrow=block;endSize=16;endFill=0;html=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.75;entryY=0;entryDx=0;entryDy=0;strokeColor=#6c8ebf;" edge="1" parent="1" source="AuthenticatedUser" target="User">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_AuthUser_User" value="extends" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10" vertex="1" connectable="0" parent="e_AuthUser_User">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="a_User_UserType" value="" style="endArrow=open;endSize=12;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;strokeColor=#6c8ebf;" edge="1" parent="1" source="User" target="UserType">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_User_UserType" value="type : UserType" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10" vertex="1" connectable="0" parent="a_User_UserType">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint y="-5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="a_UF_User" value="" style="endArrow=open;endSize=12;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.25;entryDx=0;entryDy=0;strokeColor=#6c8ebf;dashed=1;" edge="1" parent="1" source="UserFactory" target="User">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_UF_User" value="creates" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10" vertex="1" connectable="0" parent="a_UF_User">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint y="-5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="e_Elec_Equip" value="" style="endArrow=block;endSize=16;endFill=0;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.25;entryY=1;entryDx=0;entryDy=0;strokeColor=#82b366;" edge="1" parent="1" source="ElectronicsItem" target="EquipmentItem">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_Elec_Equip" value="extends" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10" vertex="1" connectable="0" parent="e_Elec_Equip">
+          <mxGeometry x="-0.2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="e_Media_Equip" value="" style="endArrow=block;endSize=16;endFill=0;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;strokeColor=#82b366;" edge="1" parent="1" source="MediaItem" target="EquipmentItem">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_Media_Equip" value="extends" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10" vertex="1" connectable="0" parent="e_Media_Equip">
+          <mxGeometry x="-0.2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="e_Lab_Equip" value="" style="endArrow=block;endSize=16;endFill=0;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.75;entryY=1;entryDx=0;entryDy=0;strokeColor=#82b366;" edge="1" parent="1" source="LaboratoryItem" target="EquipmentItem">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_Lab_Equip" value="extends" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10" vertex="1" connectable="0" parent="e_Lab_Equip">
+          <mxGeometry x="-0.2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="a_Equip_Cat" value="" style="endArrow=open;endSize=12;html=1;exitX=0.25;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;strokeColor=#82b366;" edge="1" parent="1" source="EquipmentItem" target="EquipmentCategory">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_Equip_Cat" value="category" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10" vertex="1" connectable="0" parent="a_Equip_Cat">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint y="-5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="a_Equip_Stat" value="" style="endArrow=open;endSize=12;html=1;exitX=0.75;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;strokeColor=#82b366;" edge="1" parent="1" source="EquipmentItem" target="EquipmentStatus">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_Equip_Stat" value="status" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10" vertex="1" connectable="0" parent="a_Equip_Stat">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint y="-5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="bridge_Equip_Policy" value="&lt;&lt;Bridge&gt;&gt;&#10;pricingPolicy : PricingPolicy" style="endArrow=open;endSize=12;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#d6b656;strokeWidth=2;fontStyle=1" edge="1" parent="1" source="EquipmentItem" target="PricingPolicy">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="a_EIF_Equip" value="" style="endArrow=open;endSize=12;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.75;entryY=0;entryDx=0;entryDy=0;strokeColor=#82b366;dashed=1;" edge="1" parent="1" source="EquipmentItemFactory" target="EquipmentItem">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_EIF_Equip" value="creates" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10" vertex="1" connectable="0" parent="a_EIF_Equip">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint y="-5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="i_Standard_Policy" value="" style="endArrow=block;endSize=16;endFill=0;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.25;entryY=1;entryDx=0;entryDy=0;strokeColor=#d6b656;dashed=1;" edge="1" parent="1" source="StandardPricing" target="PricingPolicy">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_Standard_Policy" value="implements" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10" vertex="1" connectable="0" parent="i_Standard_Policy">
+          <mxGeometry x="-0.2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="i_Tiered_Policy" value="" style="endArrow=block;endSize=16;endFill=0;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.75;entryY=1;entryDx=0;entryDy=0;strokeColor=#d6b656;dashed=1;" edge="1" parent="1" source="TieredPricing" target="PricingPolicy">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_Tiered_Policy" value="implements" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10" vertex="1" connectable="0" parent="i_Tiered_Policy">
+          <mxGeometry x="-0.2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="i_Promo_Policy" value="" style="endArrow=block;endSize=16;endFill=0;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.25;entryY=1;entryDx=0;entryDy=0;strokeColor=#d6b656;dashed=1;" edge="1" parent="1" source="PromotionalPricing" target="PricingPolicy">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_Promo_Policy" value="implements" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10" vertex="1" connectable="0" parent="i_Promo_Policy">
+          <mxGeometry x="-0.2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="a_PPF_Policy" value="" style="endArrow=open;endSize=12;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#d6b656;dashed=1;" edge="1" parent="1" source="PricingPolicyFactory" target="PricingPolicy">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_PPF_Policy" value="registry" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10" vertex="1" connectable="0" parent="a_PPF_Policy">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint y="-5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="a_Rental_Status" value="" style="endArrow=open;endSize=12;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;strokeColor=#9673a6;" edge="1" parent="1" source="Rental" target="RentalStatus">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_Rental_Status" value="status" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10" vertex="1" connectable="0" parent="a_Rental_Status">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint y="-5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="a_Rental_Damage" value="" style="endArrow=open;endSize=12;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#9673a6;" edge="1" parent="1" source="Rental" target="DamageLevel">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_Rental_Damage" value="damageLevel" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10" vertex="1" connectable="0" parent="a_Rental_Damage">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint y="-5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="a_UR_User" value="" style="endArrow=open;endSize=12;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.25;entryY=1;entryDx=0;entryDy=0;strokeColor=#6c8ebf;" edge="1" parent="1" source="UserRepository" target="User">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_UR_User" value="returns" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10" vertex="1" connectable="0" parent="a_UR_User">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint y="-5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="a_UR_AuthUser" value="" style="endArrow=open;endSize=12;html=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;strokeColor=#6c8ebf;exitPerimeter=0;" edge="1" parent="1" source="UserRepository" target="AuthenticatedUser">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_UR_AuthUser" value="findByEmail" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10" vertex="1" connectable="0" parent="a_UR_AuthUser">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint y="-5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="a_ER_Equip" value="" style="endArrow=open;endSize=12;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;strokeColor=#6c8ebf;" edge="1" parent="1" source="EquipmentRepository" target="EquipmentItem">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_ER_Equip" value="returns" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10" vertex="1" connectable="0" parent="a_ER_Equip">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint y="-5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="a_RR_Rental" value="" style="endArrow=open;endSize=12;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.75;entryY=1;entryDx=0;entryDy=0;strokeColor=#6c8ebf;" edge="1" parent="1" source="RentalRepository" target="Rental">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_RR_Rental" value="CRUD" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10" vertex="1" connectable="0" parent="a_RR_Rental">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint y="-5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="a_BR_Bill" value="" style="endArrow=open;endSize=12;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;strokeColor=#6c8ebf;" edge="1" parent="1" source="BillRepository" target="Bill">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_BR_Bill" value="CRUD" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10" vertex="1" connectable="0" parent="a_BR_Bill">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint y="-5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="a_Auth_UR" value="" style="endArrow=open;endSize=12;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#82b366;" edge="1" parent="1" source="AuthService" target="UserRepository">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_Auth_UR" value="uses" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10" vertex="1" connectable="0" parent="a_Auth_UR">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint y="-5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="a_Auth_PH" value="" style="endArrow=open;endSize=12;html=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#82b366;dashed=1;" edge="1" parent="1" source="AuthService" target="PasswordHasher">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_Auth_PH" value="verifies" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10" vertex="1" connectable="0" parent="a_Auth_PH">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint y="-5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="a_RS_UR" value="" style="endArrow=open;endSize=12;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.75;entryDx=0;entryDy=0;strokeColor=#82b366;" edge="1" parent="1" source="RentalService" target="UserRepository">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_RS_UR" value="1" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10" vertex="1" connectable="0" parent="a_RS_UR">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="a_RS_ER" value="" style="endArrow=open;endSize=12;html=1;exitX=0;exitY=0.75;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#82b366;" edge="1" parent="1" source="RentalService" target="EquipmentRepository">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_RS_ER" value="1" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10" vertex="1" connectable="0" parent="a_RS_ER">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="a_RS_RR" value="" style="endArrow=open;endSize=12;html=1;exitX=0;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#82b366;" edge="1" parent="1" source="RentalService" target="RentalRepository">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_RS_RR" value="1" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10" vertex="1" connectable="0" parent="a_RS_RR">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="a_BS_UR" value="" style="endArrow=open;endSize=12;html=1;exitX=0.25;exitY=0;exitDx=0;exitDy=0;entryX=0.75;entryY=1;entryDx=0;entryDy=0;strokeColor=#82b366;" edge="1" parent="1" source="BillingService" target="UserRepository">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_BS_UR" value="1" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10" vertex="1" connectable="0" parent="a_BS_UR">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint y="-5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="a_BS_ER" value="" style="endArrow=open;endSize=12;html=1;exitX=0.25;exitY=0;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#82b366;" edge="1" parent="1" source="BillingService" target="EquipmentRepository">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_BS_ER" value="1" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10" vertex="1" connectable="0" parent="a_BS_ER">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint y="-5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="a_BS_RR" value="" style="endArrow=open;endSize=12;html=1;exitX=0.75;exitY=0;exitDx=0;exitDy=0;entryX=0.75;entryY=1;entryDx=0;entryDy=0;strokeColor=#82b366;" edge="1" parent="1" source="BillingService" target="RentalRepository">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_BS_RR" value="1" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10" vertex="1" connectable="0" parent="a_BS_RR">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint y="-5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="a_BS_BR" value="" style="endArrow=open;endSize=12;html=1;exitX=0.75;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;strokeColor=#82b366;" edge="1" parent="1" source="BillingService" target="BillRepository">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_BS_BR" value="1" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10" vertex="1" connectable="0" parent="a_BS_BR">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint y="-5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="a_Repos_DM" value="" style="endArrow=open;endSize=12;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;strokeColor=#9673a6;dashed=1;" edge="1" parent="1" source="UserRepository" target="DatabaseManager">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_Repos_DM" value="getConnection()" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10" vertex="1" connectable="0" parent="a_Repos_DM">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="a_DM_DC" value="" style="endArrow=diamond;endSize=12;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#9673a6;" edge="1" parent="1" source="DatabaseManager" target="DbConfig">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_DM_DC" value="1 config" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10" vertex="1" connectable="0" parent="a_DM_DC">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint y="-5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="a_Startup_DM" value="" style="endArrow=open;endSize=12;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.75;entryDx=0;entryDy=0;strokeColor=#f8cecc;dashed=1;" edge="1" parent="1" source="StartupDialog" target="DatabaseManager">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_Startup_DM" value="tests" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10" vertex="1" connectable="0" parent="a_Startup_DM">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint y="-5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="a_Main_Startup" value="" style="endArrow=open;endSize=12;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#f8cecc;" edge="1" parent="1" source="Main" target="StartupDialog">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_Main_Startup" value="shows" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10" vertex="1" connectable="0" parent="a_Main_Startup">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint y="-5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="a_Main_Login" value="" style="endArrow=open;endSize=12;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#f8cecc;" edge="1" parent="1" source="Main" target="LoginFrame">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_Main_Login" value="opens" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10" vertex="1" connectable="0" parent="a_Main_Login">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint y="-5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="a_Login_Auth" value="" style="endArrow=open;endSize=12;html=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;strokeColor=#f8cecc;" edge="1" parent="1" source="LoginFrame" target="AuthService">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_Login_Auth" value="calls" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10" vertex="1" connectable="0" parent="a_Login_Auth">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint y="-5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="a_Login_MainShell" value="" style="endArrow=open;endSize=12;html=1;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#f8cecc;" edge="1" parent="1" source="LoginFrame" target="MainShell">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_Login_MainShell" value="opens on success" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10" vertex="1" connectable="0" parent="a_Login_MainShell">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint y="-5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="a_MS_Sidebar" value="" style="endArrow=diamond;endSize=12;html=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#f8cecc;" edge="1" parent="1" source="MainShell" target="SidebarPanel">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_MS_Sidebar" value="1" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10" vertex="1" connectable="0" parent="a_MS_Sidebar">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="a_MS_Equip" value="" style="endArrow=diamond;endSize=12;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#f8cecc;" edge="1" parent="1" source="MainShell" target="EquipmentPanel">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_MS_Equip" value="1" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10" vertex="1" connectable="0" parent="a_MS_Equip">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="a_MS_Rent" value="" style="endArrow=diamond;endSize=12;html=1;exitX=0.75;exitY=1;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;strokeColor=#f8cecc;" edge="1" parent="1" source="MainShell" target="RentPanel">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_MS_Rent" value="1" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10" vertex="1" connectable="0" parent="a_MS_Rent">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint y="-5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="a_MS_Return" value="" style="endArrow=diamond;endSize=12;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#f8cecc;" edge="1" parent="1" source="MainShell" target="ReturnPanel">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_MS_Return" value="1" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10" vertex="1" connectable="0" parent="a_MS_Return">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint y="-5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="a_MS_MyRentals" value="" style="endArrow=diamond;endSize=12;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.75;entryY=0;entryDx=0;entryDy=0;strokeColor=#f8cecc;" edge="1" parent="1" source="MainShell" target="MyRentalsPanel">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_MS_MyRentals" value="1" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10" vertex="1" connectable="0" parent="a_MS_MyRentals">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint y="-5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="a_RP_RS" value="" style="endArrow=open;endSize=12;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;strokeColor=#f8cecc;" edge="1" parent="1" source="RentPanel" target="RentalService">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_RP_RS" value="calls" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10" vertex="1" connectable="0" parent="a_RP_RS">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint y="-5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="a_RetP_BS" value="" style="endArrow=open;endSize=12;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;strokeColor=#f8cecc;" edge="1" parent="1" source="ReturnPanel" target="BillingService">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_RetP_BS" value="calls" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10" vertex="1" connectable="0" parent="a_RetP_BS">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint y="-5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="a_EP_ER" value="" style="endArrow=open;endSize=12;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;strokeColor=#f8cecc;" edge="1" parent="1" source="EquipmentPanel" target="EquipmentRepository">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_EP_ER" value="uses" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10" vertex="1" connectable="0" parent="a_EP_ER">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint y="-5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="a_UP_UR" value="" style="endArrow=open;endSize=12;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;strokeColor=#f8cecc;" edge="1" parent="1" source="UsersPanel" target="UserRepository">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_UP_UR" value="uses" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10" vertex="1" connectable="0" parent="a_UP_UR">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint y="-5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="a_CUD_NUP" value="" style="endArrow=diamond;endSize=12;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;strokeColor=#f8cecc;" edge="1" parent="1" source="CreateUserDialog" target="NewUserPanel">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_CUD_NUP" value="1 form" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10" vertex="1" connectable="0" parent="a_CUD_NUP">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint y="-5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="a_NUP_PH" value="" style="endArrow=open;endSize=12;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;strokeColor=#f8cecc;dashed=1;" edge="1" parent="1" source="NewUserPanel" target="PasswordHasher">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_NUP_PH" value="hashes" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10" vertex="1" connectable="0" parent="a_NUP_PH">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint y="-5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="a_NUP_UF" value="" style="endArrow=open;endSize=12;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;strokeColor=#f8cecc;dashed=1;" edge="1" parent="1" source="NewUserPanel" target="UserFactory">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_NUP_UF" value="creates" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10" vertex="1" connectable="0" parent="a_NUP_UF">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint y="-5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="legend" value="Legend" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontStyle=1;verticalAlign=top" vertex="1" parent="1">
+          <mxGeometry x="1900" y="120" width="240" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="leg1" value="—▷  inheritance (extends)" style="text;html=1;align=left;verticalAlign=middle;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="1920" y="150" width="200" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="leg2" value="- -▷  realization (implements)" style="text;html=1;align=left;verticalAlign=middle;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="1920" y="175" width="200" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="leg3" value="──▷  association (uses / has)" style="text;html=1;align=left;verticalAlign=middle;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="1920" y="200" width="200" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="leg4" value="◆──  composition (owns)" style="text;html=1;align=left;verticalAlign=middle;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="1920" y="225" width="200" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="leg5" value="◇──  aggregation" style="text;html=1;align=left;verticalAlign=middle;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="1920" y="250" width="200" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="leg6" value="Solid arrow = compile-time&#10;Dashed arrow = runtime / utility" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fontStyle=2" vertex="1" parent="1">
+          <mxGeometry x="1920" y="275" width="200" height="40" as="geometry" />
+        </mxCell>
+
+        <mxCell id="patterns" value="Design Patterns Used" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;verticalAlign=top" vertex="1" parent="1">
+          <mxGeometry x="1900" y="340" width="240" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="pat1" value="• Bridge&#10;  EquipmentItem ◁▷ PricingPolicy" style="text;html=1;align=left;verticalAlign=middle;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="1920" y="370" width="200" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="pat2" value="• Abstract Factory&#10;  EquipmentItemFactory, UserFactory" style="text;html=1;align=left;verticalAlign=middle;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="1920" y="405" width="200" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="pat3" value="• Strategy&#10;  PricingPolicy + 3 impls" style="text;html=1;align=left;verticalAlign=middle;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="1920" y="440" width="200" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="pat4" value="• Singleton&#10;  DatabaseManager, PricingPolicyFactory" style="text;html=1;align=left;verticalAlign=middle;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="1920" y="475" width="200" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="pat5" value="• Repository&#10;  4 *Repository classes" style="text;html=1;align=left;verticalAlign=middle;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="1920" y="510" width="200" height="20" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
