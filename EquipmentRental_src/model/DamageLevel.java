@@ -11,9 +11,9 @@ package model;
  */
 public enum DamageLevel {
     NONE("None", 0),
-    SMALL("Small (小)", 1),
-    MEDIUM("Medium (中)", 2),
-    LARGE("Large (大)", 4);
+    SMALL("Small", 1),
+    MEDIUM("Medium", 2),
+    LARGE("Large", 4);
 
     private final String label;
     private final int multiplier;
