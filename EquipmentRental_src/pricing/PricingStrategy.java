@@ -26,7 +26,10 @@ public interface PricingStrategy {
      * consistent regardless of who is renting; only the discount differs
      * between Standard / Final-Year / Staff pricing.
      *
-     * Late surcharge: lateDays x the equipment's own daily rental rate.
+     * Late surcharge: lateDays x the equipment category's own late-penalty rate
+     * (Electronics RM15/day, Media RM10/day, Lab RM20/day - supplied by each
+     * Equipment subclass via getLatePenaltyRatePerDay()). This lets every
+     * category apply its own penalty rule without changing this strategy.
      *
      * Damage surcharge: dailyRate x damage-level multiplier
      * (Small/小 x1, Medium/中 x2, Large/大 x4, None = 0).
@@ -35,7 +38,7 @@ public interface PricingStrategy {
         double rate = equipment.getDailyRentalRate();
         double latePenalty = 0.0;
         if (lateDays > 0) {
-            latePenalty = lateDays * rate;
+            latePenalty = lateDays * equipment.getLatePenaltyRatePerDay();
         }
         double damagePenalty = (damageLevel == null) ? 0.0 : rate * damageLevel.getMultiplier();
         return latePenalty + damagePenalty;
@@ -43,4 +46,12 @@ public interface PricingStrategy {
 
     /** Label shown on the bill, e.g. "Standard Pricing", "Staff Discount Pricing". */
     String getStrategyName();
+
+    /** Reconstructs the correct strategy instance from its persisted name string. */
+    static PricingStrategy fromName(String name) {
+        if (name == null) return new StandardPricingStrategy();
+        if (name.contains("Staff")) return new StaffDiscountPricingStrategy();
+        if (name.contains("Final")) return new FinalYearDiscountPricingStrategy();
+        return new StandardPricingStrategy();
+    }
 }

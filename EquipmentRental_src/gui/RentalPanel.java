@@ -8,6 +8,9 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.List;
 
 public class RentalPanel extends JPanel {
@@ -16,7 +19,7 @@ public class RentalPanel extends JPanel {
     private final EquipmentPanel equipmentPanel; // to refresh availability there too
     private final BillingPanel billingPanel;      // to push new bills there
 
-    private final JComboBox<Equipment> equipmentBox = new JComboBox<>();
+    private final JButton rentBtn = new JButton("Rent Out");
     private final JComboBox<User> userBox = new JComboBox<>();
     private final JSpinner daysSpinner = new JSpinner(new SpinnerNumberModel(3, 1, 7, 1));
 
@@ -99,9 +102,11 @@ public class RentalPanel extends JPanel {
         gbc.gridx = 4; gbc.weightx = 0; form.add(UIStyle.fieldLabel("Days"), gbc);
         gbc.gridx = 5; gbc.weightx = 1; form.add(daysSpinner, gbc);
 
-        JButton rentBtn = new JButton("Rent Out");
         UIStyle.stylePrimaryButton(rentBtn);
         rentBtn.addActionListener(e -> handleRent());
+        rentBtn.addChangeListener(e -> updateRentButtonState());
+        equipmentBox.addActionListener(e -> updateRentButtonState());
+        userBox.addActionListener(e -> updateRentButtonState());
 
         gbc.gridy = 2; gbc.gridx = 0; gbc.gridwidth = 6; gbc.weightx = 0;
         gbc.anchor = GridBagConstraints.EAST;
@@ -153,31 +158,56 @@ public class RentalPanel extends JPanel {
         List<Rental> active = system.getActiveRentals();
         Rental rental = active.get(row);
 
-        int daysLateInput = 0;
-        String lateStr = JOptionPane.showInputDialog(this,
-                "How many days late is the return? (0 if on time)", "0");
-        if (lateStr == null) return; // cancelled
-        try {
-            daysLateInput = Integer.parseInt(lateStr.trim());
-            if (daysLateInput < 0) daysLateInput = 0;
-        } catch (NumberFormatException ignored) { }
+        // 真实归还日期：用 JSpinner 调整 LocalDate，默认今天
+        LocalDate returnDate = promptForReturnDate(rental.getRentDate());
+        if (returnDate == null) return; // 用户取消
+
+        long daysLate = ChronoUnit.DAYS.between(rental.getDueDate(), returnDate);
 
         DamageLevel damageLevel = (DamageLevel) JOptionPane.showInputDialog(this,
                 "What condition was the equipment returned in?",
                 "Condition Check", JOptionPane.QUESTION_MESSAGE, null,
                 DamageLevel.values(), DamageLevel.NONE);
-        if (damageLevel == null) damageLevel = DamageLevel.NONE; // cancelled = assume no damage
+        if (damageLevel == null) damageLevel = DamageLevel.NONE; // 取消 = 视作无损坏
 
-        LocalDate returnDate = rental.getDueDate().plusDays(daysLateInput);
         Bill bill = system.returnRental(rental, returnDate, damageLevel);
 
         billingPanel.addBill(bill);
         refreshAll();
 
+        String lateMsg;
+        if (daysLate <= 0) {
+            lateMsg = "Returned on time (0 days late).";
+        } else {
+            lateMsg = "Returned " + daysLate + " day(s) LATE.";
+        }
         JOptionPane.showMessageDialog(this,
-                "Return processed. Net payable: RM " + String.format("%.2f", bill.getNetPayable())
+                "Return processed (" + lateMsg + ")\nNet payable: RM " + String.format("%.2f", bill.getNetPayable())
                         + "\nFull bill available in the Billing tab.",
                 "Return Complete", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    /**
+     * 让用户选一个真实的归还日期（默认今天，不得早于租出日，不得晚于今天）。
+     * 取消则返回 null。
+     */
+    private LocalDate promptForReturnDate(LocalDate rentDate) {
+        LocalDate today = LocalDate.now();
+        SpinnerDateModel model = new SpinnerDateModel(new Date(), Date.from(rentDate.atStartOfDay(ZoneId.systemDefault()).toInstant()), Date.from(today.atStartOfDay(ZoneId.systemDefault()).toInstant()), java.util.Calendar.DAY_OF_MONTH);
+        JSpinner dateSpinner = new JSpinner(model);
+        JSpinner.DateEditor editor = new JSpinner.DateEditor(dateSpinner, "yyyy-MM-dd");
+        dateSpinner.setEditor(editor);
+
+        JPanel panel = new JPanel(new GridLayout(0, 1, 4, 4));
+        panel.add(new JLabel("Enter the actual return date:"));
+        panel.add(dateSpinner);
+
+        int result = JOptionPane.showConfirmDialog(this, panel,
+                "Return Date", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        if (result != JOptionPane.OK_OPTION) return null;
+
+        java.util.Date utilDate = (java.util.Date) dateSpinner.getValue();
+        return utilDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     }
 
     public void refreshAll() {
@@ -194,7 +224,15 @@ public class RentalPanel extends JPanel {
                     r.getRentDate(), r.getDueDate()
             });
         }
+
+        // Disable Rent button if either dropdown has no selection
+        rentBtn.setEnabled(equipmentBox.getSelectedItem() != null && userBox.getSelectedItem() != null);
+
         equipmentPanel.refreshTable();
+    }
+
+    private void updateRentButtonState() {
+        rentBtn.setEnabled(equipmentBox.getSelectedItem() != null && userBox.getSelectedItem() != null);
     }
 
 }

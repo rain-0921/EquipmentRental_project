@@ -50,6 +50,19 @@ public class Rental {
         syncIdCounter(rentalId);
     }
 
+    /**
+     * Full reconstruction including the pricing strategy that was used when the
+     * rental was originally created. Restores the correct strategy to the Equipment
+     * so any subsequent operations (e.g. bill recalculation) use the right rules.
+     */
+    public static Rental fromPersistedRow(String rentalId, Equipment equipment, User user,
+            LocalDate rentDate, LocalDate dueDate, LocalDate returnDate,
+            DamageLevel damageLevel, String pricingStrategyName) {
+        Rental r = new Rental(rentalId, equipment, user, rentDate, dueDate, returnDate, damageLevel);
+        equipment.setPricingStrategy(pricing.PricingStrategy.fromName(pricingStrategyName));
+        return r;
+    }
+
     /** Attaches a Bill loaded from the database without recalculating it. */
     public void attachExistingBill(Bill bill) {
         this.bill = bill;

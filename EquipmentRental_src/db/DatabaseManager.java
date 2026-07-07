@@ -38,8 +38,7 @@ public final class DatabaseManager {
                 user_id      VARCHAR(20) PRIMARY KEY,
                 full_name    VARCHAR(150) NOT NULL,
                 role         VARCHAR(20)  NOT NULL,       -- 'STUDENT' or 'STAFF'
-                final_year   BOOLEAN,                     -- used when role = STUDENT
-                department   VARCHAR(100)                 -- used when role = STAFF
+                final_year   BOOLEAN                      -- used when role = STUDENT
             )
             """,
             """
@@ -102,6 +101,11 @@ public final class DatabaseManager {
                 stmt.execute("UPDATE rental SET damage_level = 'MEDIUM' WHERE damaged = TRUE AND damage_level = 'NONE'");
                 stmt.execute("ALTER TABLE rental DROP COLUMN damaged");
             }
+        }
+
+        // Drop the unused department column (created before staff no longer needed it)
+        try (Statement stmt = conn.createStatement()) {
+            stmt.execute("ALTER TABLE app_user DROP COLUMN IF EXISTS department");
         }
     }
 

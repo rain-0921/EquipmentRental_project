@@ -51,7 +51,7 @@ public class RentalDAO {
     /** Loads all rentals, resolving Equipment/User references from the provided lookup maps. */
     public List<Rental> findAll(Map<String, Equipment> equipmentById, Map<String, User> userById) {
         List<Rental> result = new ArrayList<>();
-        String sql = "SELECT rental_id, equipment_id, user_id, rent_date, due_date, return_date, damage_level " +
+        String sql = "SELECT rental_id, equipment_id, user_id, rent_date, due_date, return_date, damage_level, pricing_strategy " +
                 "FROM rental ORDER BY rental_id";
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
@@ -72,12 +72,14 @@ public class RentalDAO {
                     } catch (IllegalArgumentException ignored) { }
                 }
 
-                Rental rental = new Rental(
+                String strategyName = rs.getString("pricing_strategy");
+                Rental rental = Rental.fromPersistedRow(
                         rs.getString("rental_id"), eq, user,
                         rs.getDate("rent_date").toLocalDate(),
                         rs.getDate("due_date").toLocalDate(),
                         returnDate,
-                        damageLevel
+                        damageLevel,
+                        strategyName
                 );
                 result.add(rental);
             }
