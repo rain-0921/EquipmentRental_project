@@ -20,6 +20,7 @@ public class RentalPanel extends JPanel {
     private final BillingPanel billingPanel;      // to push new bills there
 
     private final JButton rentBtn = new JButton("Rent Out");
+    private final JComboBox<Equipment> equipmentBox = new JComboBox<>();
     private final JComboBox<User> userBox = new JComboBox<>();
     private final JSpinner daysSpinner = new JSpinner(new SpinnerNumberModel(3, 1, 7, 1));
 
