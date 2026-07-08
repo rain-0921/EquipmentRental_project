@@ -7,6 +7,7 @@ import rental.model.equipment.EquipmentStatus;
 import rental.model.rental.Rental;
 import rental.model.user.User;
 import rental.model.rental.RentalStatus;
+import rental.model.penalty.DamageSeverity;
 
 import java.util.List;
 
@@ -46,7 +47,7 @@ public class RentalService {
         Rental rental = new Rental(rentalId, user, equipment, days);
         rentalRepository.addRental(rental);
         
-        equipment.setStatus(EquipmentStatus.RENTED);
+        equipmentRepository.updateStatus(equipment.getEquipmentId(), EquipmentStatus.RENTED);
         
         return "SUCCESS:" + rentalId;
     }
@@ -71,7 +72,7 @@ public class RentalService {
         return rentalRepository.getActiveRentalsByUser(user);
     }
 
-    public String submitReturnRequest(String rentalId) {
+    public String submitReturnRequest(String rentalId, String reportedSeverity) {
         Rental rental = rentalRepository.getRental(rentalId);
         
         if (rental == null) {
@@ -83,6 +84,7 @@ public class RentalService {
             return "Cannot submit return for this rental";
         }
         
+        rental.setReportedSeverity(DamageSeverity.valueOf(reportedSeverity));
         rental.setStatus(RentalStatus.RETURN_REQUESTED);
         rentalRepository.updateRental(rental);
         

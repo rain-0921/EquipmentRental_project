@@ -174,15 +174,7 @@ public class SubmitReturnPanel extends JPanel {
         String rentalId = selected.split(" - ")[0];
         DamageSeverity severity = (DamageSeverity) severityComboBox.getSelectedItem();
 
-        List<Rental> rentals = rentalService.getUserRentals(currentUser);
-        for (Rental r : rentals) {
-            if (r.getRentalId().equals(rentalId)) {
-                r.setReportedSeverity(severity);
-                break;
-            }
-        }
-
-        String result = rentalService.submitReturnRequest(rentalId);
+        String result = rentalService.submitReturnRequest(rentalId, severity.name());
         
         if (result.equals("SUCCESS")) {
             resultArea.setText("Return Request Submitted Successfully!\n\n" +
