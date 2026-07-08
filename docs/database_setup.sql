@@ -85,13 +85,3 @@ CREATE TABLE IF NOT EXISTS counters (
 
 INSERT INTO counters (counter_name, counter_value) VALUES ('rental_counter', 0), ('bill_counter', 0)
 ON DUPLICATE KEY UPDATE counter_value = counter_value;
-
--- Migration: Add status columns for existing databases (safe to run multiple times)
--- For MySQL 8.0.29+, use IF NOT EXISTS; for older versions, ignore the error if column exists
-ALTER TABLE users
-    ADD COLUMN status ENUM('ACTIVE', 'INACTIVE') NOT NULL DEFAULT 'ACTIVE';
-
-ALTER TABLE equipment
-    MODIFY COLUMN status ENUM('AVAILABLE', 'RENTED', 'DAMAGED', 'INACTIVE') NOT NULL DEFAULT 'AVAILABLE';
-
-UPDATE users SET status = 'ACTIVE' WHERE status IS NULL;
