@@ -107,4 +107,19 @@ public class UserService {
         userRepository.updateUser(user);
         return "SUCCESS";
     }
+
+    public String activateUser(String userId) {
+        User user = userRepository.getUser(userId);
+        if (user == null) {
+            return "User not found";
+        }
+
+        if (user.getStatus() != UserStatus.INACTIVE) {
+            return "User is already active";
+        }
+
+        user.setStatus(UserStatus.ACTIVE);
+        userRepository.updateUser(user);
+        return "SUCCESS";
+    }
 }

@@ -133,6 +133,20 @@ public class EquipmentService {
         return "SUCCESS";
     }
 
+    public String activateEquipment(String equipmentId) {
+        Equipment equipment = equipmentRepository.getEquipment(equipmentId);
+        if (equipment == null) {
+            return "Equipment not found";
+        }
+
+        if (equipment.getStatus() != EquipmentStatus.INACTIVE) {
+            return "Equipment is already active";
+        }
+
+        equipmentRepository.updateStatus(equipmentId, EquipmentStatus.AVAILABLE);
+        return "SUCCESS";
+    }
+
     public String canEditEquipment(String equipmentId) {
         Equipment eq = getEquipment(equipmentId);
         if (eq == null) return "Equipment not found";

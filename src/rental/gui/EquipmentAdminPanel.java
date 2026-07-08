@@ -90,6 +90,16 @@ public class EquipmentAdminPanel extends JPanel {
         deleteButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         deleteButton.addActionListener(e -> inactivateEquipment());
 
+        JButton activateButton = new JButton("Activate Equipment");
+        activateButton.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        activateButton.setBackground(new Color(40, 167, 69));
+        activateButton.setForeground(Color.WHITE);
+        activateButton.setFocusPainted(false);
+        activateButton.setBorderPainted(false);
+        activateButton.setOpaque(true);
+        activateButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        activateButton.addActionListener(e -> activateEquipment());
+
         JButton repairButton = new JButton("Mark as Repaired");
         repairButton.setFont(new Font("Segoe UI", Font.BOLD, 13));
         repairButton.setBackground(new Color(0, 123, 255));
@@ -105,6 +115,8 @@ public class EquipmentAdminPanel extends JPanel {
         buttonPanel.add(editButton);
         buttonPanel.add(Box.createHorizontalStrut(8));
         buttonPanel.add(deleteButton);
+        buttonPanel.add(Box.createHorizontalStrut(8));
+        buttonPanel.add(activateButton);
         buttonPanel.add(Box.createHorizontalStrut(8));
         buttonPanel.add(repairButton);
 
@@ -165,9 +177,9 @@ public class EquipmentAdminPanel extends JPanel {
     }
 
     private void showAddDialog() {
-        JDialog dialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(this), 
+        JDialog dialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(this),
             "Add New Equipment", true);
-        dialog.setSize(420, 380);
+        dialog.setSize(460, 560);
         dialog.setLocationRelativeTo(this);
 
         JPanel panel = new JPanel();
@@ -237,7 +249,14 @@ public class EquipmentAdminPanel extends JPanel {
         });
 
         panel.add(Box.createVerticalStrut(10));
-        panel.add(saveButton);
+        JPanel buttonWrapper = new JPanel();
+        buttonWrapper.setOpaque(false);
+        buttonWrapper.setLayout(new BoxLayout(buttonWrapper, BoxLayout.X_AXIS));
+        buttonWrapper.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
+        buttonWrapper.add(Box.createHorizontalGlue());
+        buttonWrapper.add(saveButton);
+        buttonWrapper.add(Box.createHorizontalGlue());
+        panel.add(buttonWrapper);
 
         dialog.add(panel);
         dialog.setVisible(true);
@@ -260,9 +279,9 @@ public class EquipmentAdminPanel extends JPanel {
 
         Equipment eq = equipmentService.getEquipment(equipmentId);
 
-        JDialog dialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(this), 
+        JDialog dialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(this),
             "Edit Equipment", true);
-        dialog.setSize(420, 380);
+        dialog.setSize(460, 560);
         dialog.setLocationRelativeTo(this);
 
         JPanel panel = new JPanel();
@@ -327,7 +346,14 @@ public class EquipmentAdminPanel extends JPanel {
         });
 
         panel.add(Box.createVerticalStrut(10));
-        panel.add(saveButton);
+        JPanel buttonWrapper = new JPanel();
+        buttonWrapper.setOpaque(false);
+        buttonWrapper.setLayout(new BoxLayout(buttonWrapper, BoxLayout.X_AXIS));
+        buttonWrapper.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
+        buttonWrapper.add(Box.createHorizontalGlue());
+        buttonWrapper.add(saveButton);
+        buttonWrapper.add(Box.createHorizontalGlue());
+        panel.add(buttonWrapper);
 
         dialog.add(panel);
         dialog.setVisible(true);
@@ -356,6 +382,40 @@ public class EquipmentAdminPanel extends JPanel {
         if (result.equals("SUCCESS")) {
             loadEquipment();
             JOptionPane.showMessageDialog(this, "Equipment inactivated successfully!");
+        } else {
+            JOptionPane.showMessageDialog(this, "Error: " + result);
+        }
+    }
+
+    private void activateEquipment() {
+        int selectedRow = equipmentTable.getSelectedRow();
+        if (selectedRow < 0) {
+            JOptionPane.showMessageDialog(this, "Please select equipment to activate");
+            return;
+        }
+
+        String equipmentId = (String) tableModel.getValueAt(selectedRow, 0);
+        String currentStatus = (String) tableModel.getValueAt(selectedRow, 3);
+
+        if (!EquipmentStatus.INACTIVE.name().equals(currentStatus)) {
+            JOptionPane.showMessageDialog(this,
+                "Only inactive equipment can be activated.\nCurrent status: " + currentStatus);
+            return;
+        }
+
+        int confirm = JOptionPane.showConfirmDialog(this,
+            "Are you sure you want to activate this equipment?\n" +
+            "Equipment ID: " + equipmentId + "\n\n" +
+            "The equipment will be set to AVAILABLE and will once again appear in the catalog.",
+            "Confirm Activate", JOptionPane.YES_NO_OPTION);
+
+        if (confirm != JOptionPane.YES_OPTION) return;
+
+        String result = equipmentService.activateEquipment(equipmentId);
+
+        if (result.equals("SUCCESS")) {
+            loadEquipment();
+            JOptionPane.showMessageDialog(this, "Equipment activated successfully!");
         } else {
             JOptionPane.showMessageDialog(this, "Error: " + result);
         }

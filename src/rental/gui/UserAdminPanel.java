@@ -89,11 +89,23 @@ public class UserAdminPanel extends JPanel {
         inactivateButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         inactivateButton.addActionListener(e -> inactivateUser());
 
+        JButton activateButton = new JButton("Activate User");
+        activateButton.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        activateButton.setBackground(new Color(40, 167, 69));
+        activateButton.setForeground(Color.WHITE);
+        activateButton.setFocusPainted(false);
+        activateButton.setBorderPainted(false);
+        activateButton.setOpaque(true);
+        activateButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        activateButton.addActionListener(e -> activateUser());
+
         buttonPanel.add(addButton);
         buttonPanel.add(Box.createHorizontalStrut(8));
         buttonPanel.add(editButton);
         buttonPanel.add(Box.createHorizontalStrut(8));
         buttonPanel.add(inactivateButton);
+        buttonPanel.add(Box.createHorizontalStrut(8));
+        buttonPanel.add(activateButton);
 
         add(topPanel, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
@@ -157,9 +169,9 @@ public class UserAdminPanel extends JPanel {
     }
 
     private void showAddDialog() {
-        JDialog dialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(this), 
+        JDialog dialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(this),
             "Add New User", true);
-        dialog.setSize(420, 340);
+        dialog.setSize(460, 520);
         dialog.setLocationRelativeTo(this);
 
         JPanel panel = new JPanel();
@@ -214,7 +226,14 @@ public class UserAdminPanel extends JPanel {
         });
 
         panel.add(Box.createVerticalStrut(10));
-        panel.add(saveButton);
+        JPanel buttonWrapper = new JPanel();
+        buttonWrapper.setOpaque(false);
+        buttonWrapper.setLayout(new BoxLayout(buttonWrapper, BoxLayout.X_AXIS));
+        buttonWrapper.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
+        buttonWrapper.add(Box.createHorizontalGlue());
+        buttonWrapper.add(saveButton);
+        buttonWrapper.add(Box.createHorizontalGlue());
+        panel.add(buttonWrapper);
 
         dialog.add(panel);
         dialog.setVisible(true);
@@ -230,9 +249,9 @@ public class UserAdminPanel extends JPanel {
         String userId = (String) tableModel.getValueAt(selectedRow, 0);
         User user = userService.getUser(userId);
 
-        JDialog dialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(this), 
+        JDialog dialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(this),
             "Edit User", true);
-        dialog.setSize(420, 300);
+        dialog.setSize(460, 480);
         dialog.setLocationRelativeTo(this);
 
         JPanel panel = new JPanel();
@@ -287,7 +306,14 @@ public class UserAdminPanel extends JPanel {
         });
 
         panel.add(Box.createVerticalStrut(10));
-        panel.add(saveButton);
+        JPanel buttonWrapper = new JPanel();
+        buttonWrapper.setOpaque(false);
+        buttonWrapper.setLayout(new BoxLayout(buttonWrapper, BoxLayout.X_AXIS));
+        buttonWrapper.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
+        buttonWrapper.add(Box.createHorizontalGlue());
+        buttonWrapper.add(saveButton);
+        buttonWrapper.add(Box.createHorizontalGlue());
+        panel.add(buttonWrapper);
 
         dialog.add(panel);
         dialog.setVisible(true);
@@ -321,6 +347,40 @@ public class UserAdminPanel extends JPanel {
         if (result.equals("SUCCESS")) {
             loadUsers();
             JOptionPane.showMessageDialog(this, "User inactivated successfully!");
+        } else {
+            JOptionPane.showMessageDialog(this, "Error: " + result);
+        }
+    }
+
+    private void activateUser() {
+        int selectedRow = usersTable.getSelectedRow();
+        if (selectedRow < 0) {
+            JOptionPane.showMessageDialog(this, "Please select a user to activate");
+            return;
+        }
+
+        String userId = (String) tableModel.getValueAt(selectedRow, 0);
+        String currentStatus = (String) tableModel.getValueAt(selectedRow, 3);
+
+        if (!UserStatus.INACTIVE.name().equals(currentStatus)) {
+            JOptionPane.showMessageDialog(this,
+                "Only inactive users can be activated.\nCurrent status: " + currentStatus);
+            return;
+        }
+
+        int confirm = JOptionPane.showConfirmDialog(this,
+            "Are you sure you want to activate this user?\n" +
+            "User ID: " + userId + "\n\n" +
+            "The user will be set to ACTIVE and will once again be able to log in to the system.",
+            "Confirm Activate", JOptionPane.YES_NO_OPTION);
+
+        if (confirm != JOptionPane.YES_OPTION) return;
+
+        String result = userService.activateUser(userId);
+
+        if (result.equals("SUCCESS")) {
+            loadUsers();
+            JOptionPane.showMessageDialog(this, "User activated successfully!");
         } else {
             JOptionPane.showMessageDialog(this, "Error: " + result);
         }
