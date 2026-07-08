@@ -30,25 +30,29 @@ public class RentalService {
 
     public String rentEquipment(String equipmentId, User user, int days) {
         Equipment equipment = equipmentRepository.getEquipment(equipmentId);
-        
+
         if (equipment == null) {
             return "Equipment not found";
         }
-        
+
+        if (equipment.getStatus() == EquipmentStatus.INACTIVE) {
+            return "Equipment is no longer available";
+        }
+
         if (equipment.getStatus() != EquipmentStatus.AVAILABLE) {
             return "Equipment is not available for rental";
         }
-        
+
         if (days <= 0) {
             return "Rental days must be a positive integer";
         }
-        
+
         String rentalId = rentalRepository.generateRentalId();
         Rental rental = new Rental(rentalId, user, equipment, days);
         rentalRepository.addRental(rental);
-        
+
         equipmentRepository.updateStatus(equipment.getEquipmentId(), EquipmentStatus.RENTED);
-        
+
         return "SUCCESS:" + rentalId;
     }
 

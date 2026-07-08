@@ -155,6 +155,21 @@ public class RentalRepository {
         return false;
     }
 
+    public boolean hasPendingReturnRequest(String equipmentId) {
+        String sql = "SELECT COUNT(*) FROM rentals WHERE equipment_id = ? AND status = 'RETURN_REQUESTED'";
+        try (Connection conn = db.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, equipmentId);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     private Rental mapResultSetToRental(ResultSet rs) throws SQLException {
         String rentalId = rs.getString("rental_id");
         String userId = rs.getString("user_id");

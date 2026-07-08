@@ -3,6 +3,7 @@ package rental.model.billing;
 import rental.model.rental.Rental;
 import rental.model.equipment.Equipment;
 import rental.model.user.User;
+import rental.model.user.UserRole;
 import rental.model.penalty.DamageSeverity;
 import rental.model.penalty.DamagePenalty;
 import rental.model.penalty.LateReturnPenalty;

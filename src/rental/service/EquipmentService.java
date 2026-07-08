@@ -68,18 +68,18 @@ public class EquipmentService {
         return equipmentRepository.getAllEquipment();
     }
 
-    public String updateEquipment(String equipmentId, String name, String description, 
+    public String updateEquipment(String equipmentId, String name, String description,
                                    EquipmentCategory category, double dailyRate) {
-        Equipment oldEquipment = equipmentRepository.getEquipment(equipmentId);
-        if (oldEquipment == null) {
-            return "Equipment not found";
+        String editCheck = canEditEquipment(equipmentId);
+        if (!editCheck.equals("CAN_EDIT")) {
+            return editCheck;
         }
-        
-        equipmentRepository.deleteEquipment(equipmentId);
-        
+
+        Equipment oldEquipment = equipmentRepository.getEquipment(equipmentId);
+
         PricingPolicy pricing = oldEquipment.getPricingPolicy();
         PenaltyRule penalty = oldEquipment.getPenaltyRule();
-        
+
         Equipment newEquipment;
         switch (category) {
             case ELECTRONICS:
@@ -94,9 +94,9 @@ public class EquipmentService {
             default:
                 return "Invalid category";
         }
-        
+
         newEquipment.setStatus(oldEquipment.getStatus());
-        equipmentRepository.addEquipment(newEquipment);
+        equipmentRepository.updateEquipment(newEquipment);
         return "SUCCESS";
     }
 
@@ -105,13 +105,36 @@ public class EquipmentService {
         if (equipment == null) {
             return "Equipment not found";
         }
-        
-        if (rentalRepository.hasActiveRentalForEquipment(equipmentId)) {
-            return "Cannot delete equipment with active rentals";
+
+        if (equipment.getStatus() == EquipmentStatus.INACTIVE) {
+            return "Equipment is already inactive";
         }
-        
-        equipmentRepository.deleteEquipment(equipmentId);
+
+        if (rentalRepository.hasActiveRentalForEquipment(equipmentId)) {
+            return "Cannot inactivate equipment with active rentals";
+        }
+
+        equipmentRepository.updateStatus(equipmentId, EquipmentStatus.INACTIVE);
         return "SUCCESS";
+    }
+
+    public String canEditEquipment(String equipmentId) {
+        Equipment eq = getEquipment(equipmentId);
+        if (eq == null) return "Equipment not found";
+
+        if (eq.getStatus() == EquipmentStatus.INACTIVE) {
+            return "Cannot edit inactive equipment";
+        }
+        if (eq.getStatus() == EquipmentStatus.RENTED) {
+            return "Cannot edit equipment that is currently rented";
+        }
+        if (eq.getStatus() == EquipmentStatus.DAMAGED) {
+            return "Cannot edit damaged equipment";
+        }
+        if (rentalRepository.hasPendingReturnRequest(equipmentId)) {
+            return "Cannot edit equipment with pending return request";
+        }
+        return "CAN_EDIT";
     }
 
     public String markAsRepaired(String equipmentId) {

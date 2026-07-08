@@ -78,15 +78,15 @@ public class EquipmentAdminPanel extends JPanel {
         editButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         editButton.addActionListener(e -> showEditDialog());
 
-        JButton deleteButton = new JButton("Delete Equipment");
+        JButton deleteButton = new JButton("Inactivate Equipment");
         deleteButton.setFont(new Font("Segoe UI", Font.BOLD, 13));
-        deleteButton.setBackground(new Color(220, 53, 69));
+        deleteButton.setBackground(new Color(108, 117, 125));
         deleteButton.setForeground(Color.WHITE);
         deleteButton.setFocusPainted(false);
         deleteButton.setBorderPainted(false);
         deleteButton.setOpaque(true);
         deleteButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        deleteButton.addActionListener(e -> deleteEquipment());
+        deleteButton.addActionListener(e -> inactivateEquipment());
 
         JButton repairButton = new JButton("Mark as Repaired");
         repairButton.setFont(new Font("Segoe UI", Font.BOLD, 13));
@@ -210,6 +210,13 @@ public class EquipmentAdminPanel extends JPanel {
         }
 
         String equipmentId = (String) tableModel.getValueAt(selectedRow, 0);
+
+        String editCheck = equipmentService.canEditEquipment(equipmentId);
+        if (!editCheck.equals("CAN_EDIT")) {
+            JOptionPane.showMessageDialog(this, "Error: " + editCheck);
+            return;
+        }
+
         Equipment eq = equipmentService.getEquipment(equipmentId);
 
         JDialog dialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(this), 
@@ -284,26 +291,26 @@ public class EquipmentAdminPanel extends JPanel {
         dialog.setVisible(true);
     }
 
-    private void deleteEquipment() {
+    private void inactivateEquipment() {
         int selectedRow = equipmentTable.getSelectedRow();
         if (selectedRow < 0) {
-            JOptionPane.showMessageDialog(this, "Please select equipment to delete");
+            JOptionPane.showMessageDialog(this, "Please select equipment to inactivate");
             return;
         }
 
         String equipmentId = (String) tableModel.getValueAt(selectedRow, 0);
 
         int confirm = JOptionPane.showConfirmDialog(this,
-            "Are you sure you want to delete this equipment?\nEquipment ID: " + equipmentId,
-            "Confirm Delete", JOptionPane.YES_NO_OPTION);
+            "Are you sure you want to inactivate this equipment?\nEquipment ID: " + equipmentId,
+            "Confirm Inactivate", JOptionPane.YES_NO_OPTION);
 
         if (confirm != JOptionPane.YES_OPTION) return;
 
         String result = equipmentService.deleteEquipment(equipmentId);
-        
+
         if (result.equals("SUCCESS")) {
             loadEquipment();
-            JOptionPane.showMessageDialog(this, "Equipment deleted successfully!");
+            JOptionPane.showMessageDialog(this, "Equipment inactivated successfully!");
         } else {
             JOptionPane.showMessageDialog(this, "Error: " + result);
         }
