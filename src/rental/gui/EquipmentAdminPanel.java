@@ -7,6 +7,7 @@ import rental.model.equipment.EquipmentStatus;
 import rental.model.equipment.EquipmentCategory;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
@@ -51,6 +52,7 @@ public class EquipmentAdminPanel extends JPanel {
         equipmentTable.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 13));
         equipmentTable.getTableHeader().setBackground(new Color(233, 236, 239));
         equipmentTable.setGridColor(new Color(222, 226, 230));
+        equipmentTable.getColumnModel().getColumn(3).setCellRenderer(new StatusCellRenderer());
         JScrollPane scrollPane = new JScrollPane(equipmentTable);
         scrollPane.setBorder(BorderFactory.createLineBorder(new Color(222, 226, 230)));
 
@@ -117,7 +119,7 @@ public class EquipmentAdminPanel extends JPanel {
 
     private void loadEquipment() {
         tableModel.setRowCount(0);
-        List<Equipment> equipmentList = equipmentService.getAllEquipment();
+        List<Equipment> equipmentList = equipmentService.getAllEquipmentIncludingInactive();
         for (Equipment eq : equipmentList) {
             Object[] row = {
                 eq.getEquipmentId(),
@@ -127,6 +129,38 @@ public class EquipmentAdminPanel extends JPanel {
                 String.format("RM %.2f", eq.getDailyRate())
             };
             tableModel.addRow(row);
+        }
+    }
+
+    private static class StatusCellRenderer extends DefaultTableCellRenderer {
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value,
+                                                       boolean isSelected, boolean hasFocus,
+                                                       int row, int column) {
+            Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            if (!isSelected && value != null) {
+                String status = value.toString();
+                if (EquipmentStatus.INACTIVE.name().equals(status)) {
+                    c.setForeground(new Color(220, 53, 69));
+                    setFont(getFont().deriveFont(Font.BOLD));
+                } else if (EquipmentStatus.AVAILABLE.name().equals(status)) {
+                    c.setForeground(new Color(40, 167, 69));
+                    setFont(getFont().deriveFont(Font.PLAIN));
+                } else if (EquipmentStatus.RENTED.name().equals(status)) {
+                    c.setForeground(new Color(0, 123, 255));
+                    setFont(getFont().deriveFont(Font.PLAIN));
+                } else if (EquipmentStatus.DAMAGED.name().equals(status)) {
+                    c.setForeground(new Color(255, 193, 7));
+                    setFont(getFont().deriveFont(Font.PLAIN));
+                } else {
+                    c.setForeground(table.getForeground());
+                    setFont(getFont().deriveFont(Font.PLAIN));
+                }
+            } else if (isSelected) {
+                setFont(getFont().deriveFont(Font.PLAIN));
+            }
+            setHorizontalAlignment(SwingConstants.CENTER);
+            return c;
         }
     }
 
@@ -301,7 +335,10 @@ public class EquipmentAdminPanel extends JPanel {
         String equipmentId = (String) tableModel.getValueAt(selectedRow, 0);
 
         int confirm = JOptionPane.showConfirmDialog(this,
-            "Are you sure you want to inactivate this equipment?\nEquipment ID: " + equipmentId,
+            "Are you sure you want to inactivate this equipment?\n" +
+            "Equipment ID: " + equipmentId + "\n\n" +
+            "Inactive equipment will remain in this admin page (with INACTIVE status), " +
+            "but will be hidden from the equipment catalog and cannot be rented.",
             "Confirm Inactivate", JOptionPane.YES_NO_OPTION);
 
         if (confirm != JOptionPane.YES_OPTION) return;

@@ -69,6 +69,21 @@ public class EquipmentRepository {
         return equipmentList;
     }
 
+    public List<Equipment> getAllEquipmentIncludingInactive() {
+        List<Equipment> equipmentList = new ArrayList<>();
+        String sql = "SELECT * FROM equipment";
+        try (Connection conn = db.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                equipmentList.add(mapResultSetToEquipment(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return equipmentList;
+    }
+
     public List<Equipment> getAvailableEquipment() {
         List<Equipment> equipmentList = new ArrayList<>();
         String sql = "SELECT * FROM equipment WHERE status = 'AVAILABLE'";

@@ -68,6 +68,10 @@ public class EquipmentService {
         return equipmentRepository.getAllEquipment();
     }
 
+    public List<Equipment> getAllEquipmentIncludingInactive() {
+        return equipmentRepository.getAllEquipmentIncludingInactive();
+    }
+
     public String updateEquipment(String equipmentId, String name, String description,
                                    EquipmentCategory category, double dailyRate) {
         String editCheck = canEditEquipment(equipmentId);

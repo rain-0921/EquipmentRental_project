@@ -1,10 +1,12 @@
 package rental.gui;
 
 import rental.model.user.User;
+import rental.model.user.UserStatus;
 import rental.service.UserService;
 import rental.model.user.UserRole;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
@@ -36,7 +38,7 @@ public class UserAdminPanel extends JPanel {
 
         topPanel.add(titleLabel, BorderLayout.WEST);
 
-        String[] columns = {"User ID", "Name", "Role", "Discount Rate"};
+        String[] columns = {"User ID", "Name", "Role", "Status", "Discount Rate"};
         tableModel = new DefaultTableModel(columns, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -49,6 +51,7 @@ public class UserAdminPanel extends JPanel {
         usersTable.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 13));
         usersTable.getTableHeader().setBackground(new Color(233, 236, 239));
         usersTable.setGridColor(new Color(222, 226, 230));
+        usersTable.getColumnModel().getColumn(3).setCellRenderer(new StatusCellRenderer());
         JScrollPane scrollPane = new JScrollPane(usersTable);
         scrollPane.setBorder(BorderFactory.createLineBorder(new Color(222, 226, 230)));
 
@@ -123,9 +126,33 @@ public class UserAdminPanel extends JPanel {
                 u.getUserId(),
                 u.getName(),
                 u.getRole().name(),
+                u.getStatus() != null ? u.getStatus().name() : UserStatus.ACTIVE.name(),
                 discountRate
             };
             tableModel.addRow(row);
+        }
+    }
+
+    private static class StatusCellRenderer extends DefaultTableCellRenderer {
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value,
+                                                       boolean isSelected, boolean hasFocus,
+                                                       int row, int column) {
+            Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            if (!isSelected && value != null) {
+                String status = value.toString();
+                if (UserStatus.INACTIVE.name().equals(status)) {
+                    c.setForeground(new Color(220, 53, 69));
+                    setFont(getFont().deriveFont(Font.BOLD));
+                } else {
+                    c.setForeground(new Color(40, 167, 69));
+                    setFont(getFont().deriveFont(Font.PLAIN));
+                }
+            } else if (isSelected) {
+                setFont(getFont().deriveFont(Font.PLAIN));
+            }
+            setHorizontalAlignment(SwingConstants.CENTER);
+            return c;
         }
     }
 
@@ -281,7 +308,10 @@ public class UserAdminPanel extends JPanel {
         }
 
         int confirm = JOptionPane.showConfirmDialog(this,
-            "Are you sure you want to inactivate this user?\nUser ID: " + userId + "\n\nInactive users cannot login to the system.",
+            "Are you sure you want to inactivate this user?\n" +
+            "User ID: " + userId + "\n\n" +
+            "The user will remain in this admin page (with INACTIVE status), " +
+            "but will no longer be able to log in to the system.",
             "Confirm Inactivate", JOptionPane.YES_NO_OPTION);
 
         if (confirm != JOptionPane.YES_OPTION) return;
