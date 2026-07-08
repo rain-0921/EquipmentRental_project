@@ -17,27 +17,26 @@ skinparam noteBackgroundColor #F8F8F8
 ' ============================================================
 package "model.user" {
 
-  abstract class User {
+  class User {
     - userId : String
     - name : String
     - password : String
     - role : UserRole
     - status : UserStatus
-    + getDiscountRate() : double {abstract}
+    - discountRate : double
+    - planName : String
+    + getDiscountRate() : double
+    + setDiscountRate(rate:double)
     + getPlanName() : String
+    + setPlanName(plan:String)
   }
 
-  class StudentUser {
-    + getDiscountRate() = 0.0
-  }
-
-  class FinalYearStudentUser {
-    + getDiscountRate() = 0.15
-  }
-
-  class StaffUser {
-    + getDiscountRate() = 0.20
-    + isStaff() : boolean
+  class UserFactory <<Singleton>> {
+    - instance : UserFactory
+    + getInstance() : UserFactory
+    + createUser(id,name,pwd,role) : User
+    + discountRateFor(role) : double
+    + planNameFor(role) : String
   }
 
   enum UserRole {
@@ -51,12 +50,10 @@ package "model.user" {
     INACTIVE
   }
 
-  User <|-- StudentUser
-  User <|-- FinalYearStudentUser
-  User <|-- StaffUser
-  StudentUser <|-- FinalYearStudentUser
   User --> UserRole
   User --> UserStatus
+  UserFactory ..> User : creates
+  UserFactory --> UserRole : reads
 }
 
 ' ============================================================
@@ -64,17 +61,14 @@ package "model.user" {
 ' ============================================================
 package "model.equipment" {
 
-  abstract class Equipment {
+  class Equipment {
     - equipmentId : String
     - name : String
     - description : String
     - category : EquipmentCategory
     - status : EquipmentStatus
     - dailyRate : double
-    - pricingPolicy : PricingPolicy
-    - penaltyRule : PenaltyRule
     + calculateRentalFee(days:int) : double
-    + getPlanName() : String
   }
 
   class Electronics {
@@ -106,35 +100,6 @@ package "model.equipment" {
   Equipment <|-- LaboratoryEquipment
   Equipment --> EquipmentCategory
   Equipment --> EquipmentStatus
-  Equipment --> PricingPolicy
-  Equipment --> PenaltyRule
-}
-
-' ============================================================
-' PRICING (Strategy pattern - open for extension)
-' ============================================================
-package "model.pricing" {
-
-  interface PricingPolicy {
-    + computeRate(e:Equipment, days:int) : double
-    + planName() : String
-  }
-
-  class StandardPricing {
-    + computeRate() : dailyRate * days
-  }
-
-  class StaffPricing {
-    + computeRate() : dailyRate * days
-  }
-
-  class FinalYearStudentDiscountPricing {
-    + computeRate() : dailyRate * days
-  }
-
-  PricingPolicy <|.. StandardPricing
-  PricingPolicy <|.. StaffPricing
-  PricingPolicy <|.. FinalYearStudentDiscountPricing
 }
 
 ' ============================================================
@@ -142,29 +107,12 @@ package "model.pricing" {
 ' ============================================================
 package "model.penalty" {
 
-  interface PenaltyRule {
-    + computeDamagePenalty(severity:DamageSeverity) : double
-  }
-
-  class DamagePenalty {
-    + fixedAmount(s:DamageSeverity) : double
-  }
-
-  class LateReturnPenalty {
-    + computeLatePenalty(e:Equipment, lateDays:int) : double
-  }
-
   enum DamageSeverity {
     NONE
     LIGHT  -> RM 10
     MODERATE -> RM 100
     HEAVY -> RM 1000
   }
-
-  PenaltyRule <|.. DamagePenalty
-  LateReturnPenalty ..> Equipment : uses
-  LateReturnPenalty ..> EquipmentCategory : uses
-  DamagePenalty ..> DamageSeverity : uses
 }
 
 ' ============================================================
@@ -202,7 +150,7 @@ package "model.rental" {
 }
 
 ' ============================================================
-' BILLING  (Singleton + Façade: BillCalculator)
+' BILLING  (Singleton: BillCalculator)
 ' ============================================================
 package "model.billing" {
 
@@ -221,22 +169,21 @@ package "model.billing" {
 
   class BillCalculator <<Singleton>> {
     - instance : BillCalculator
-    - damagePenalty : DamagePenalty
-    - lateReturnPenalty : LateReturnPenalty
     + getInstance() : BillCalculator
     + calculate(...) : Bill
+    - computeLatePenalty(rate:double, days:int) : double
+    - computeDamagePenalty(severity:DamageSeverity) : double
   }
 
   Bill --> Rental : rental
   BillCalculator ..> Bill : creates
   BillCalculator ..> Equipment : uses
   BillCalculator ..> User : uses
-  BillCalculator --> DamagePenalty
-  BillCalculator --> LateReturnPenalty
+  BillCalculator ..> DamageSeverity : reads
 }
 
 ' ============================================================
-' SERVICE LAYER  (Singleton services - Façade for repos)
+' SERVICE LAYER  (Singleton services)
 ' ============================================================
 package "service" {
 
@@ -290,6 +237,7 @@ package "service" {
   ApprovalService --> BillCalculator
   UserService --> UserRepository
   UserService --> RentalRepository
+  UserService --> UserFactory
 }
 
 ' ============================================================
@@ -340,9 +288,12 @@ package "repo" {
   RentalRepository --> DatabaseManager
   BillRepository --> DatabaseManager
   UserRepository ..> User
+  UserRepository --> UserFactory
   EquipmentRepository ..> Equipment
   RentalRepository ..> Rental
+  RentalRepository --> UserFactory
   BillRepository ..> Bill
+  BillRepository --> UserFactory
 }
 
 ' ============================================================
@@ -392,34 +343,23 @@ package "gui" {
 }
 
 ' ============================================================
-' Design Pattern Annotations
+' Design Pattern Annotation
 ' ============================================================
 note as N1
-  Strategy Pattern: PricingPolicy / PenaltyRule
+  Singleton Pattern (sole design pattern for this system)
   ------------------------------------------
-  New pricing policy = new class implementing
-  PricingPolicy -> injected into Equipment.
-  New penalty rule = new class implementing
-  PenaltyRule -> injected into Equipment.
-end note
-
-note as N2
-  Singleton Pattern
-  ------------------------------------------
-  DatabaseManager, all Repositories, all
-  Services and BillCalculator use the
-  private-constructor + getInstance()
-  idiom so the whole app shares one
-  instance per process.
-end note
-
-note as N3
-  Façade Pattern
-  ------------------------------------------
-  *Service classes and BillCalculator
-  hide the complexity of the repository
-  layer + multiple Strategy objects
-  behind a single, simple API.
+  DatabaseManager, all four Repositories, all
+  five Services, BillCalculator and UserFactory
+  use the private-constructor + getInstance()
+  idiom so the whole application shares exactly
+  ONE instance per process for:
+   - the database connection,
+   - every data-access object,
+   - every business service, and
+   - the billing calculator.
+  This satisfies the assignment's "exactly one
+  design pattern" rule and matches the genuine
+  need for shared state across the Swing app.
 end note
 
 @enduml

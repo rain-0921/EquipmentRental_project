@@ -4,14 +4,10 @@ import rental.model.rental.Rental;
 import rental.model.rental.RentalStatus;
 import rental.model.user.User;
 import rental.model.user.UserRole;
-import rental.model.user.StudentUser;
-import rental.model.user.FinalYearStudentUser;
-import rental.model.user.StaffUser;
+import rental.model.user.UserFactory;
 import rental.model.equipment.Equipment;
 import rental.model.equipment.EquipmentCategory;
 import rental.model.equipment.EquipmentStatus;
-import rental.model.pricing.StandardPricing;
-import rental.model.penalty.DamagePenalty;
 import rental.model.penalty.DamageSeverity;
 
 import java.sql.*;
@@ -22,9 +18,11 @@ import java.util.stream.Collectors;
 public class RentalRepository {
     private static RentalRepository instance;
     private final DatabaseManager db;
+    private final UserFactory userFactory;
 
     private RentalRepository() {
         this.db = DatabaseManager.getInstance();
+        this.userFactory = UserFactory.getInstance();
     }
 
     public static RentalRepository getInstance() {
@@ -37,7 +35,7 @@ public class RentalRepository {
     public String generateRentalId() {
         String sql = "UPDATE counters SET counter_value = counter_value + 1 WHERE counter_name = 'rental_counter'";
         String selectSql = "SELECT counter_value FROM counters WHERE counter_name = 'rental_counter'";
-        
+
         try (Connection conn = db.getConnection()) {
             Statement stmt = conn.createStatement();
             stmt.execute(sql);
@@ -191,58 +189,37 @@ public class RentalRepository {
         String userName = rs.getString("user_name");
         String password = rs.getString("password");
         UserRole userRole = UserRole.valueOf(rs.getString("user_role"));
-        
-        User user;
-        switch (userRole) {
-            case STUDENT:
-                user = new StudentUser(userId, userName, password);
-                break;
-            case FINAL_YEAR_STUDENT:
-                user = new FinalYearStudentUser(userId, userName, password);
-                break;
-            case STAFF:
-                user = new StaffUser(userId, userName, password);
-                break;
-            default:
-                user = new StudentUser(userId, userName, password);
-        }
+
+        User user = userFactory.createUser(userId, userName, password, userRole);
 
         String equipmentId = rs.getString("equipment_id");
         String equipmentName = rs.getString("equipment_name");
         String description = rs.getString("description");
         EquipmentCategory category = EquipmentCategory.valueOf(rs.getString("category"));
         double dailyRate = rs.getDouble("daily_rate");
-        
+
         Equipment equipment;
         switch (category) {
             case ELECTRONICS:
-                equipment = new rental.model.equipment.Electronics(
-                    equipmentId, equipmentName, description, dailyRate, 
-                    new StandardPricing(), new DamagePenalty());
+                equipment = new rental.model.equipment.Electronics(equipmentId, equipmentName, description, dailyRate);
                 break;
             case MEDIA:
-                equipment = new rental.model.equipment.MediaEquipment(
-                    equipmentId, equipmentName, description, dailyRate, 
-                    new StandardPricing(), new DamagePenalty());
+                equipment = new rental.model.equipment.MediaEquipment(equipmentId, equipmentName, description, dailyRate);
                 break;
             case LABORATORY:
-                equipment = new rental.model.equipment.LaboratoryEquipment(
-                    equipmentId, equipmentName, description, dailyRate, 
-                    new StandardPricing(), new DamagePenalty());
+                equipment = new rental.model.equipment.LaboratoryEquipment(equipmentId, equipmentName, description, dailyRate);
                 break;
             default:
-                equipment = new rental.model.equipment.Electronics(
-                    equipmentId, equipmentName, description, dailyRate, 
-                    new StandardPricing(), new DamagePenalty());
+                equipment = new rental.model.equipment.Electronics(equipmentId, equipmentName, description, dailyRate);
         }
 
         java.sql.Date rentalDate = rs.getDate("rental_date");
         java.sql.Date dueDate = rs.getDate("due_date");
         java.sql.Date actualReturnDate = rs.getDate("actual_return_date");
-        
+
         Rental rental = new Rental(rentalId, user, equipment, rs.getInt("rental_days"));
         rental.setStatus(RentalStatus.valueOf(rs.getString("status")));
-        
+
         if (rentalDate != null) {
             rental.setRentalDate(rentalDate.toLocalDate());
         }

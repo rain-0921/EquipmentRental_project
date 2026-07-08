@@ -3,23 +3,15 @@ package rental.model.billing;
 import rental.model.rental.Rental;
 import rental.model.equipment.Equipment;
 import rental.model.user.User;
-import rental.model.user.UserRole;
 import rental.model.penalty.DamageSeverity;
-import rental.model.penalty.DamagePenalty;
-import rental.model.penalty.LateReturnPenalty;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
 public class BillCalculator {
     private static BillCalculator instance;
-    private final DamagePenalty damagePenalty;
-    private final LateReturnPenalty lateReturnPenalty;
 
-    private BillCalculator() {
-        this.damagePenalty = new DamagePenalty();
-        this.lateReturnPenalty = new LateReturnPenalty();
-    }
+    private BillCalculator() {}
 
     public static BillCalculator getInstance() {
         if (instance == null) {
@@ -29,7 +21,7 @@ public class BillCalculator {
     }
 
     public Bill calculate(String billId, Rental rental, Equipment equipment,
-                         User user, DamageSeverity severity) {
+                          User user, DamageSeverity severity) {
         int days = rental.getRentalDays();
         double subtotal = equipment.calculateRentalFee(days);
         double discountRate = user.getDiscountRate();
@@ -42,12 +34,25 @@ public class BillCalculator {
         if (actualReturnDate != null && actualReturnDate.isAfter(dueDate)) {
             lateDays = (int) ChronoUnit.DAYS.between(dueDate, actualReturnDate);
         }
-        double latePenalty = lateReturnPenalty.computeLatePenalty(equipment, lateDays);
-
-        double damagePenaltyAmount = damagePenalty.computeDamagePenalty(severity);
+        double latePenalty = computeLatePenalty(equipment.getCategory().lateFeePerDay(), lateDays);
+        double damagePenaltyAmount = computeDamagePenalty(severity);
 
         return new Bill(billId, rental, equipment, user,
-                       user.getPlanName(),
-                       subtotal, discount, latePenalty, damagePenaltyAmount);
+                        user.getPlanName(),
+                        subtotal, discount, latePenalty, damagePenaltyAmount);
+    }
+
+    private double computeLatePenalty(double lateFeePerDay, int lateDays) {
+        if (lateDays <= 0) return 0.0;
+        return lateFeePerDay * lateDays;
+    }
+
+    private double computeDamagePenalty(DamageSeverity severity) {
+        return switch (severity) {
+            case LIGHT -> 10.0;
+            case MODERATE -> 100.0;
+            case HEAVY -> 1000.0;
+            case NONE -> 0.0;
+        };
     }
 }

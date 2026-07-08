@@ -8,10 +8,6 @@ import rental.model.equipment.EquipmentCategory;
 import rental.model.equipment.Electronics;
 import rental.model.equipment.MediaEquipment;
 import rental.model.equipment.LaboratoryEquipment;
-import rental.model.pricing.PricingPolicy;
-import rental.model.pricing.StandardPricing;
-import rental.model.penalty.PenaltyRule;
-import rental.model.penalty.DamagePenalty;
 
 import java.util.List;
 
@@ -49,19 +45,16 @@ public class EquipmentService {
             }
         }
 
-        PricingPolicy pricing = new StandardPricing();
-        DamagePenalty penalty = new DamagePenalty();
-
         Equipment equipment;
         switch (category) {
             case ELECTRONICS:
-                equipment = new Electronics(equipmentId, name, description, dailyRate, pricing, penalty);
+                equipment = new Electronics(equipmentId, name, description, dailyRate);
                 break;
             case MEDIA:
-                equipment = new MediaEquipment(equipmentId, name, description, dailyRate, pricing, penalty);
+                equipment = new MediaEquipment(equipmentId, name, description, dailyRate);
                 break;
             case LABORATORY:
-                equipment = new LaboratoryEquipment(equipmentId, name, description, dailyRate, pricing, penalty);
+                equipment = new LaboratoryEquipment(equipmentId, name, description, dailyRate);
                 break;
             default:
                 return "Invalid category";
@@ -84,33 +77,31 @@ public class EquipmentService {
     }
 
     public String updateEquipment(String equipmentId, String name, String description,
-                                   EquipmentCategory category, double dailyRate) {
+                                  EquipmentCategory category, double dailyRate) {
         String editCheck = canEditEquipment(equipmentId);
         if (!editCheck.equals("CAN_EDIT")) {
             return editCheck;
         }
 
         Equipment oldEquipment = equipmentRepository.getEquipment(equipmentId);
-
-        PricingPolicy pricing = oldEquipment.getPricingPolicy();
-        PenaltyRule penalty = oldEquipment.getPenaltyRule();
+        EquipmentStatus previousStatus = oldEquipment.getStatus();
 
         Equipment newEquipment;
         switch (category) {
             case ELECTRONICS:
-                newEquipment = new Electronics(equipmentId, name, description, dailyRate, pricing, penalty);
+                newEquipment = new Electronics(equipmentId, name, description, dailyRate);
                 break;
             case MEDIA:
-                newEquipment = new MediaEquipment(equipmentId, name, description, dailyRate, pricing, penalty);
+                newEquipment = new MediaEquipment(equipmentId, name, description, dailyRate);
                 break;
             case LABORATORY:
-                newEquipment = new LaboratoryEquipment(equipmentId, name, description, dailyRate, pricing, penalty);
+                newEquipment = new LaboratoryEquipment(equipmentId, name, description, dailyRate);
                 break;
             default:
                 return "Invalid category";
         }
 
-        newEquipment.setStatus(oldEquipment.getStatus());
+        newEquipment.setStatus(previousStatus);
         equipmentRepository.updateEquipment(newEquipment);
         return "SUCCESS";
     }
@@ -176,11 +167,11 @@ public class EquipmentService {
         if (equipment == null) {
             return "Equipment not found";
         }
-        
+
         if (equipment.getStatus() != EquipmentStatus.DAMAGED) {
             return "Equipment is not in DAMAGED status";
         }
-        
+
         equipment.setStatus(EquipmentStatus.AVAILABLE);
         equipmentRepository.updateEquipment(equipment);
         return "SUCCESS";
@@ -191,7 +182,7 @@ public class EquipmentService {
         if (equipment == null) {
             return "Equipment not found";
         }
-        
+
         equipment.setStatus(status);
         equipmentRepository.updateEquipment(equipment);
         return "SUCCESS";

@@ -3,9 +3,7 @@ package rental.repo;
 import rental.model.user.User;
 import rental.model.user.UserRole;
 import rental.model.user.UserStatus;
-import rental.model.user.StudentUser;
-import rental.model.user.FinalYearStudentUser;
-import rental.model.user.StaffUser;
+import rental.model.user.UserFactory;
 
 import java.sql.*;
 import java.util.*;
@@ -13,9 +11,11 @@ import java.util.*;
 public class UserRepository {
     private static UserRepository instance;
     private final DatabaseManager db;
+    private final UserFactory userFactory;
 
     private UserRepository() {
         this.db = DatabaseManager.getInstance();
+        this.userFactory = UserFactory.getInstance();
     }
 
     public static UserRepository getInstance() {
@@ -133,20 +133,7 @@ public class UserRepository {
         String password = rs.getString("password");
         UserRole role = UserRole.valueOf(rs.getString("role"));
 
-        User user;
-        switch (role) {
-            case STUDENT:
-                user = new StudentUser(userId, name, password);
-                break;
-            case FINAL_YEAR_STUDENT:
-                user = new FinalYearStudentUser(userId, name, password);
-                break;
-            case STAFF:
-                user = new StaffUser(userId, name, password);
-                break;
-            default:
-                user = new StudentUser(userId, name, password);
-        }
+        User user = userFactory.createUser(userId, name, password, role);
 
         String statusStr = rs.getString("status");
         if (statusStr != null) {

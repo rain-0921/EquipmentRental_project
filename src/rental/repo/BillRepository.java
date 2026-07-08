@@ -4,13 +4,9 @@ import rental.model.billing.Bill;
 import rental.model.rental.Rental;
 import rental.model.user.User;
 import rental.model.user.UserRole;
-import rental.model.user.StudentUser;
-import rental.model.user.FinalYearStudentUser;
-import rental.model.user.StaffUser;
+import rental.model.user.UserFactory;
 import rental.model.equipment.Equipment;
 import rental.model.equipment.EquipmentCategory;
-import rental.model.pricing.StandardPricing;
-import rental.model.penalty.DamagePenalty;
 
 import java.sql.*;
 import java.util.*;
@@ -19,9 +15,11 @@ import java.util.stream.Collectors;
 public class BillRepository {
     private static BillRepository instance;
     private final DatabaseManager db;
+    private final UserFactory userFactory;
 
     private BillRepository() {
         this.db = DatabaseManager.getInstance();
+        this.userFactory = UserFactory.getInstance();
     }
 
     public static BillRepository getInstance() {
@@ -34,7 +32,7 @@ public class BillRepository {
     public String generateBillId() {
         String sql = "UPDATE counters SET counter_value = counter_value + 1 WHERE counter_name = 'bill_counter'";
         String selectSql = "SELECT counter_value FROM counters WHERE counter_name = 'bill_counter'";
-        
+
         try (Connection conn = db.getConnection()) {
             Statement stmt = conn.createStatement();
             stmt.execute(sql);
@@ -119,7 +117,7 @@ public class BillRepository {
 
     public List<Bill> getBillsByUser(User user) {
         return getAllBills().stream()
-            .filter(b -> b.getRental() != null && 
+            .filter(b -> b.getRental() != null &&
                         b.getRental().getUser().getUserId().equals(user.getUserId()))
             .collect(Collectors.toList());
     }
@@ -157,7 +155,7 @@ public class BillRepository {
         bill.setLatePenalty(latePenalty);
         bill.setDamagePenalty(damagePenalty);
         bill.setNetPayable(netPayable);
-        
+
         return bill;
     }
 
@@ -170,21 +168,12 @@ public class BillRepository {
                 UserRole role = UserRole.valueOf(rs.getString("role"));
                 String name = rs.getString("name");
                 String password = rs.getString("password");
-                switch (role) {
-                    case STUDENT:
-                        return new StudentUser(userId, name, password);
-                    case FINAL_YEAR_STUDENT:
-                        return new FinalYearStudentUser(userId, name, password);
-                    case STAFF:
-                        return new StaffUser(userId, name, password);
-                    default:
-                        return new StudentUser(userId, name, password);
-                }
+                return userFactory.createUser(userId, name, password, role);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return new StudentUser(userId, "Unknown", "");
+        return userFactory.createUser(userId, "Unknown", "", UserRole.STUDENT);
     }
 
     private Equipment getEquipmentById(Connection conn, String equipmentId) {
@@ -197,27 +186,19 @@ public class BillRepository {
                 String name = rs.getString("name");
                 String description = rs.getString("description");
                 double dailyRate = rs.getDouble("daily_rate");
-                
+
                 switch (category) {
                     case ELECTRONICS:
-                        return new rental.model.equipment.Electronics(
-                            equipmentId, name, description, dailyRate, 
-                            new StandardPricing(), new DamagePenalty());
+                        return new rental.model.equipment.Electronics(equipmentId, name, description, dailyRate);
                     case MEDIA:
-                        return new rental.model.equipment.MediaEquipment(
-                            equipmentId, name, description, dailyRate, 
-                            new StandardPricing(), new DamagePenalty());
+                        return new rental.model.equipment.MediaEquipment(equipmentId, name, description, dailyRate);
                     case LABORATORY:
-                        return new rental.model.equipment.LaboratoryEquipment(
-                            equipmentId, name, description, dailyRate, 
-                            new StandardPricing(), new DamagePenalty());
+                        return new rental.model.equipment.LaboratoryEquipment(equipmentId, name, description, dailyRate);
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return new rental.model.equipment.Electronics(
-            equipmentId, "Unknown", "", 0, 
-            new StandardPricing(), new DamagePenalty());
+        return new rental.model.equipment.Electronics(equipmentId, "Unknown", "", 0);
     }
 }

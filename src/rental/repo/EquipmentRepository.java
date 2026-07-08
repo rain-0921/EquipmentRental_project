@@ -1,7 +1,6 @@
 package rental.repo;
 
 import rental.model.equipment.*;
-import rental.model.pricing.*;
 import rental.model.penalty.*;
 
 import java.sql.*;
@@ -183,22 +182,19 @@ public class EquipmentRepository {
         EquipmentStatus status = EquipmentStatus.valueOf(rs.getString("status"));
         double dailyRate = rs.getDouble("daily_rate");
 
-        PricingPolicy pricing = new StandardPricing();
-        DamagePenalty penalty = new DamagePenalty();
-
         Equipment equipment;
         switch (category) {
             case ELECTRONICS:
-                equipment = new Electronics(equipmentId, name, description, dailyRate, pricing, penalty);
+                equipment = new Electronics(equipmentId, name, description, dailyRate);
                 break;
             case MEDIA:
-                equipment = new MediaEquipment(equipmentId, name, description, dailyRate, pricing, penalty);
+                equipment = new MediaEquipment(equipmentId, name, description, dailyRate);
                 break;
             case LABORATORY:
-                equipment = new LaboratoryEquipment(equipmentId, name, description, dailyRate, pricing, penalty);
+                equipment = new LaboratoryEquipment(equipmentId, name, description, dailyRate);
                 break;
             default:
-                equipment = new Electronics(equipmentId, name, description, dailyRate, pricing, penalty);
+                equipment = new Electronics(equipmentId, name, description, dailyRate);
         }
         equipment.setStatus(status);
         return equipment;

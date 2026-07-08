@@ -5,9 +5,7 @@ import rental.repo.RentalRepository;
 import rental.model.user.User;
 import rental.model.user.UserRole;
 import rental.model.user.UserStatus;
-import rental.model.user.StudentUser;
-import rental.model.user.FinalYearStudentUser;
-import rental.model.user.StaffUser;
+import rental.model.user.UserFactory;
 
 import java.util.List;
 
@@ -15,10 +13,12 @@ public class UserService {
     private static UserService instance;
     private final UserRepository userRepository;
     private final RentalRepository rentalRepository;
+    private final UserFactory userFactory;
 
     private UserService() {
         this.userRepository = UserRepository.getInstance();
         this.rentalRepository = RentalRepository.getInstance();
+        this.userFactory = UserFactory.getInstance();
     }
 
     public static UserService getInstance() {
@@ -32,22 +32,8 @@ public class UserService {
         if (userRepository.getUser(userId) != null) {
             return "User ID already exists";
         }
-        
-        User user;
-        switch (role) {
-            case STUDENT:
-                user = new StudentUser(userId, name, password);
-                break;
-            case FINAL_YEAR_STUDENT:
-                user = new FinalYearStudentUser(userId, name, password);
-                break;
-            case STAFF:
-                user = new StaffUser(userId, name, password);
-                break;
-            default:
-                return "Invalid role";
-        }
-        
+
+        User user = userFactory.createUser(userId, name, password, role);
         userRepository.addUser(user);
         return "SUCCESS";
     }
@@ -65,28 +51,16 @@ public class UserService {
         if (user == null) {
             return "User not found";
         }
-        
-        if (name != null && !name.isEmpty()) {
-            user = createUpdatedUser(user, name, password, user.getRole());
-        } else if (password != null && !password.isEmpty()) {
-            user = createUpdatedUser(user, user.getName(), password, user.getRole());
+
+        if ((name != null && !name.isEmpty()) || (password != null && !password.isEmpty())) {
+            String newName = (name != null && !name.isEmpty()) ? name : user.getName();
+            String newPassword = (password != null && !password.isEmpty()) ? password : user.getPassword();
+            user = userFactory.createUser(userId, newName, newPassword, user.getRole());
+            user.setStatus(user.getStatus());
         }
-        
+
         userRepository.updateUser(user);
         return "SUCCESS";
-    }
-
-    private User createUpdatedUser(User oldUser, String name, String password, UserRole role) {
-        switch (role) {
-            case STUDENT:
-                return new StudentUser(oldUser.getUserId(), name, password);
-            case FINAL_YEAR_STUDENT:
-                return new FinalYearStudentUser(oldUser.getUserId(), name, password);
-            case STAFF:
-                return new StaffUser(oldUser.getUserId(), name, password);
-            default:
-                return oldUser;
-        }
     }
 
     public String inactivateUser(String userId) {

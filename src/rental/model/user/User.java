@@ -1,11 +1,13 @@
 package rental.model.user;
 
-public abstract class User {
-    protected String userId;
-    protected String name;
-    protected String password;
-    protected UserRole role;
-    protected UserStatus status;
+public class User {
+    private String userId;
+    private String name;
+    private String password;
+    private UserRole role;
+    private UserStatus status;
+    private double discountRate;
+    private String planName;
 
     public User(String userId, String name, String password, UserRole role) {
         this.userId = userId;
@@ -15,33 +17,24 @@ public abstract class User {
         this.status = UserStatus.ACTIVE;
     }
 
-    public String getUserId() {
-        return userId;
+    public User(String userId, String name, String password, UserRole role,
+                double discountRate, String planName) {
+        this(userId, name, password, role);
+        this.discountRate = discountRate;
+        this.planName = planName;
     }
 
-    public String getName() {
-        return name;
-    }
+    public String getUserId() { return userId; }
+    public String getName() { return name; }
+    public String getPassword() { return password; }
+    public UserRole getRole() { return role; }
+    public UserStatus getStatus() { return status; }
 
-    public String getPassword() {
-        return password;
-    }
+    public void setStatus(UserStatus status) { this.status = status; }
 
-    public UserRole getRole() {
-        return role;
-    }
+    public double getDiscountRate() { return discountRate; }
+    public void setDiscountRate(double discountRate) { this.discountRate = discountRate; }
 
-    public UserStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(UserStatus status) {
-        this.status = status;
-    }
-
-    public abstract double getDiscountRate();
-
-    public String getPlanName() {
-        return "Standard (0% off)";
-    }
+    public String getPlanName() { return planName; }
+    public void setPlanName(String planName) { this.planName = planName; }
 }
