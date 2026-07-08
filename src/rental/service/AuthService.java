@@ -2,6 +2,7 @@ package rental.service;
 
 import rental.repo.UserRepository;
 import rental.model.user.User;
+import rental.model.user.UserStatus;
 
 public class AuthService {
     private static AuthService instance;
@@ -22,6 +23,9 @@ public class AuthService {
     public User authenticate(String userId, String password) {
         User user = userRepository.findByUserIdAndPassword(userId, password);
         if (user != null) {
+            if (user.getStatus() == UserStatus.INACTIVE) {
+                return null;
+            }
             this.currentUser = user;
             return user;
         }

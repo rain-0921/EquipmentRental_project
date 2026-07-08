@@ -56,7 +56,7 @@ public class EquipmentRepository {
 
     public List<Equipment> getAllEquipment() {
         List<Equipment> equipmentList = new ArrayList<>();
-        String sql = "SELECT * FROM equipment";
+        String sql = "SELECT * FROM equipment WHERE status != 'INACTIVE'";
         try (Connection conn = db.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
@@ -70,18 +70,39 @@ public class EquipmentRepository {
     }
 
     public List<Equipment> getAvailableEquipment() {
-        return getAllEquipment().stream()
-            .filter(e -> e.getStatus() == EquipmentStatus.AVAILABLE)
-            .collect(Collectors.toList());
+        List<Equipment> equipmentList = new ArrayList<>();
+        String sql = "SELECT * FROM equipment WHERE status = 'AVAILABLE'";
+        try (Connection conn = db.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                equipmentList.add(mapResultSetToEquipment(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return equipmentList;
     }
 
     public List<Equipment> searchEquipment(String keyword) {
         String lowerKeyword = keyword.toLowerCase();
-        return getAllEquipment().stream()
-            .filter(e -> e.getName().toLowerCase().contains(lowerKeyword) ||
-                        e.getEquipmentId().toLowerCase().contains(lowerKeyword) ||
-                        e.getCategory().name().toLowerCase().contains(lowerKeyword))
-            .collect(Collectors.toList());
+        List<Equipment> equipmentList = new ArrayList<>();
+        String sql = "SELECT * FROM equipment WHERE status != 'INACTIVE'";
+        try (Connection conn = db.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                Equipment eq = mapResultSetToEquipment(rs);
+                if (eq.getName().toLowerCase().contains(lowerKeyword) ||
+                    eq.getEquipmentId().toLowerCase().contains(lowerKeyword) ||
+                    eq.getCategory().name().toLowerCase().contains(lowerKeyword)) {
+                    equipmentList.add(eq);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return equipmentList;
     }
 
     public void updateEquipment(Equipment equipment) {

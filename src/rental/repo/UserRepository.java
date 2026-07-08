@@ -1,7 +1,11 @@
 package rental.repo;
 
-import rental.model.user.*;
 import rental.model.user.User;
+import rental.model.user.UserRole;
+import rental.model.user.UserStatus;
+import rental.model.user.StudentUser;
+import rental.model.user.FinalYearStudentUser;
+import rental.model.user.StaffUser;
 
 import java.sql.*;
 import java.util.*;
@@ -22,13 +26,14 @@ public class UserRepository {
     }
 
     public void addUser(User user) {
-        String sql = "INSERT INTO users (user_id, name, password, role) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO users (user_id, name, password, role, status) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = db.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, user.getUserId());
             pstmt.setString(2, user.getName());
             pstmt.setString(3, user.getPassword());
             pstmt.setString(4, user.getRole().name());
+            pstmt.setString(5, user.getStatus().name());
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -52,7 +57,7 @@ public class UserRepository {
 
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
-        String sql = "SELECT * FROM users";
+        String sql = "SELECT * FROM users WHERE status = 'ACTIVE'";
         try (Connection conn = db.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
@@ -66,12 +71,13 @@ public class UserRepository {
     }
 
     public void updateUser(User user) {
-        String sql = "UPDATE users SET name = ?, password = ? WHERE user_id = ?";
+        String sql = "UPDATE users SET name = ?, password = ?, status = ? WHERE user_id = ?";
         try (Connection conn = db.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, user.getName());
             pstmt.setString(2, user.getPassword());
-            pstmt.setString(3, user.getUserId());
+            pstmt.setString(3, user.getStatus().name());
+            pstmt.setString(4, user.getUserId());
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -112,15 +118,26 @@ public class UserRepository {
         String password = rs.getString("password");
         UserRole role = UserRole.valueOf(rs.getString("role"));
 
+        User user;
         switch (role) {
             case STUDENT:
-                return new StudentUser(userId, name, password);
+                user = new StudentUser(userId, name, password);
+                break;
             case FINAL_YEAR_STUDENT:
-                return new FinalYearStudentUser(userId, name, password);
+                user = new FinalYearStudentUser(userId, name, password);
+                break;
             case STAFF:
-                return new StaffUser(userId, name, password);
+                user = new StaffUser(userId, name, password);
+                break;
             default:
-                return new StudentUser(userId, name, password);
+                user = new StudentUser(userId, name, password);
         }
+
+        String statusStr = rs.getString("status");
+        if (statusStr != null) {
+            user.setStatus(UserStatus.valueOf(statusStr));
+        }
+
+        return user;
     }
 }

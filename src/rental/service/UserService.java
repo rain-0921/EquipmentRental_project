@@ -1,8 +1,10 @@
 package rental.service;
 
 import rental.repo.UserRepository;
+import rental.repo.RentalRepository;
 import rental.model.user.User;
 import rental.model.user.UserRole;
+import rental.model.user.UserStatus;
 import rental.model.user.StudentUser;
 import rental.model.user.FinalYearStudentUser;
 import rental.model.user.StaffUser;
@@ -12,9 +14,11 @@ import java.util.List;
 public class UserService {
     private static UserService instance;
     private final UserRepository userRepository;
+    private final RentalRepository rentalRepository;
 
     private UserService() {
         this.userRepository = UserRepository.getInstance();
+        this.rentalRepository = RentalRepository.getInstance();
     }
 
     public static UserService getInstance() {
@@ -85,11 +89,22 @@ public class UserService {
         }
     }
 
-    public boolean deleteUser(String userId) {
+    public String inactivateUser(String userId) {
         User user = userRepository.getUser(userId);
         if (user == null) {
-            return false;
+            return "User not found";
         }
-        return userRepository.deleteUser(userId);
+
+        if (user.getStatus() == UserStatus.INACTIVE) {
+            return "User is already inactive";
+        }
+
+        if (rentalRepository.hasActiveRentalsForUser(userId)) {
+            return "Cannot inactivate user with active rentals. Please return all equipment first.";
+        }
+
+        user.setStatus(UserStatus.INACTIVE);
+        userRepository.updateUser(user);
+        return "SUCCESS";
     }
 }

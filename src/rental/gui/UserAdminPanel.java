@@ -76,21 +76,21 @@ public class UserAdminPanel extends JPanel {
         editButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         editButton.addActionListener(e -> showEditDialog());
 
-        JButton deleteButton = new JButton("Delete User");
-        deleteButton.setFont(new Font("Segoe UI", Font.BOLD, 13));
-        deleteButton.setBackground(new Color(220, 53, 69));
-        deleteButton.setForeground(Color.WHITE);
-        deleteButton.setFocusPainted(false);
-        deleteButton.setBorderPainted(false);
-        deleteButton.setOpaque(true);
-        deleteButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        deleteButton.addActionListener(e -> deleteUser());
+        JButton inactivateButton = new JButton("Inactivate User");
+        inactivateButton.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        inactivateButton.setBackground(new Color(108, 117, 125));
+        inactivateButton.setForeground(Color.WHITE);
+        inactivateButton.setFocusPainted(false);
+        inactivateButton.setBorderPainted(false);
+        inactivateButton.setOpaque(true);
+        inactivateButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        inactivateButton.addActionListener(e -> inactivateUser());
 
         buttonPanel.add(addButton);
         buttonPanel.add(Box.createHorizontalStrut(8));
         buttonPanel.add(editButton);
         buttonPanel.add(Box.createHorizontalStrut(8));
-        buttonPanel.add(deleteButton);
+        buttonPanel.add(inactivateButton);
 
         add(topPanel, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
@@ -266,33 +266,33 @@ public class UserAdminPanel extends JPanel {
         dialog.setVisible(true);
     }
 
-    private void deleteUser() {
+    private void inactivateUser() {
         int selectedRow = usersTable.getSelectedRow();
         if (selectedRow < 0) {
-            JOptionPane.showMessageDialog(this, "Please select a user to delete");
+            JOptionPane.showMessageDialog(this, "Please select a user to inactivate");
             return;
         }
 
         String userId = (String) tableModel.getValueAt(selectedRow, 0);
 
         if (userId.equals(currentUser.getUserId())) {
-            JOptionPane.showMessageDialog(this, "You cannot delete your own account!");
+            JOptionPane.showMessageDialog(this, "You cannot inactivate your own account!");
             return;
         }
 
         int confirm = JOptionPane.showConfirmDialog(this,
-            "Are you sure you want to delete this user?\nUser ID: " + userId,
-            "Confirm Delete", JOptionPane.YES_NO_OPTION);
+            "Are you sure you want to inactivate this user?\nUser ID: " + userId + "\n\nInactive users cannot login to the system.",
+            "Confirm Inactivate", JOptionPane.YES_NO_OPTION);
 
         if (confirm != JOptionPane.YES_OPTION) return;
 
-        boolean success = userService.deleteUser(userId);
-        
-        if (success) {
+        String result = userService.inactivateUser(userId);
+
+        if (result.equals("SUCCESS")) {
             loadUsers();
-            JOptionPane.showMessageDialog(this, "User deleted successfully!");
+            JOptionPane.showMessageDialog(this, "User inactivated successfully!");
         } else {
-            JOptionPane.showMessageDialog(this, "Error: Failed to delete user");
+            JOptionPane.showMessageDialog(this, "Error: " + result);
         }
     }
 
