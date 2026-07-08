@@ -1,99 +1,43 @@
-@startuml
+@startuml class
 
-title Campus Equipment Rental System - Class Diagram
+title Smart Equipment Rental & Billing System - Class Diagram
 
 skinparam classAttributeIconSize 0
+skinparam classBackgroundColor #FFFFDD
+skinparam classBorderColor #B8860B
+skinparam classArrowColor #444
+skinparam stereotypeCBackgroundColor #F5DEB3
+skinparam interfaceBackgroundColor #E0F2D8
+skinparam enumBackgroundColor #FCE4D6
+skinparam abstractBackgroundColor #FFE0E0
+skinparam noteBackgroundColor #F8F8F8
 
-package "model.equipment" {
-  abstract class Equipment {
-    - equipmentId: String
-    - name: String
-    - description: String
-    - category: EquipmentCategory
-    - status: EquipmentStatus
-    - dailyRate: double
-    - pricingPolicy: PricingPolicy
-    - penaltyRule: PenaltyRule
-    + calculateRentalFee(days: int): double
-    + getPlanName(): String
-  }
-
-  enum EquipmentStatus {
-    AVAILABLE
-    RENTED
-    DAMAGED
-  }
-
-  enum EquipmentCategory {
-    ELECTRONICS
-    MEDIA
-    LABORATORY
-    + lateFeePerDay(): double
-  }
-
-  class Electronics {
-    + Electronics(id, name, desc, rate, policy, penalty)
-  }
-
-  class MediaEquipment {
-    + MediaEquipment(id, name, desc, rate, policy, penalty)
-  }
-
-  class LaboratoryEquipment {
-    + LaboratoryEquipment(id, name, desc, rate, policy, penalty)
-  }
-}
-
-package "model.pricing" {
-  interface PricingPolicy {
-    + computeRate(equipment: Equipment, days: int): double
-    + planName(): String
-  }
-
-  class StandardPricing {
-    + computeRate(equipment: Equipment, days: int): double
-    + planName(): String
-  }
-
-  class FinalYearStudentDiscountPricing {
-    + computeRate(equipment: Equipment, days: int): double
-    + planName(): String
-  }
-
-  class StaffPricing {
-    + computeRate(equipment: Equipment, days: int): double
-    + planName(): String
-  }
-}
-
-package "model.penalty" {
-  enum DamageSeverity {
-    NONE
-    LIGHT
-    MODERATE
-    HEAVY
-  }
-
-  interface PenaltyRule {
-    + computeDamagePenalty(severity: DamageSeverity): double
-  }
-
-  class DamagePenalty {
-    + computeDamagePenalty(severity: DamageSeverity): double
-  }
-
-  class LateReturnPenalty {
-    + computeLatePenalty(equipment: Equipment, lateDays: int): double
-  }
-}
-
+' ============================================================
+' USER PACKAGE
+' ============================================================
 package "model.user" {
+
   abstract class User {
-    - userId: String
-    - name: String
-    - password: String
-    - role: UserRole
-    + getDiscountRate(): double {abstract}
+    - userId : String
+    - name : String
+    - password : String
+    - role : UserRole
+    - status : UserStatus
+    + getDiscountRate() : double {abstract}
+    + getPlanName() : String
+  }
+
+  class StudentUser {
+    + getDiscountRate() = 0.0
+  }
+
+  class FinalYearStudentUser {
+    + getDiscountRate() = 0.15
+  }
+
+  class StaffUser {
+    + getDiscountRate() = 0.20
+    + isStaff() : boolean
   }
 
   enum UserRole {
@@ -102,33 +46,145 @@ package "model.user" {
     STAFF
   }
 
-  class StudentUser {
-    + getDiscountRate(): double
+  enum UserStatus {
+    ACTIVE
+    INACTIVE
   }
 
-  class FinalYearStudentUser {
-    + getDiscountRate(): double
-  }
-
-  class StaffUser {
-    + getDiscountRate(): double
-  }
+  User <|-- StudentUser
+  User <|-- FinalYearStudentUser
+  User <|-- StaffUser
+  StudentUser <|-- FinalYearStudentUser
+  User --> UserRole
+  User --> UserStatus
 }
 
+' ============================================================
+' EQUIPMENT PACKAGE
+' ============================================================
+package "model.equipment" {
+
+  abstract class Equipment {
+    - equipmentId : String
+    - name : String
+    - description : String
+    - category : EquipmentCategory
+    - status : EquipmentStatus
+    - dailyRate : double
+    - pricingPolicy : PricingPolicy
+    - penaltyRule : PenaltyRule
+    + calculateRentalFee(days:int) : double
+    + getPlanName() : String
+  }
+
+  class Electronics {
+  }
+
+  class MediaEquipment {
+  }
+
+  class LaboratoryEquipment {
+  }
+
+  enum EquipmentCategory {
+    ELECTRONICS(20.0)
+    MEDIA(10.0)
+    LABORATORY(30.0)
+    + lateFeePerDay() : double
+    + idPrefix() : String
+  }
+
+  enum EquipmentStatus {
+    AVAILABLE
+    RENTED
+    DAMAGED
+    INACTIVE
+  }
+
+  Equipment <|-- Electronics
+  Equipment <|-- MediaEquipment
+  Equipment <|-- LaboratoryEquipment
+  Equipment --> EquipmentCategory
+  Equipment --> EquipmentStatus
+  Equipment --> PricingPolicy
+  Equipment --> PenaltyRule
+}
+
+' ============================================================
+' PRICING (Strategy pattern - open for extension)
+' ============================================================
+package "model.pricing" {
+
+  interface PricingPolicy {
+    + computeRate(e:Equipment, days:int) : double
+    + planName() : String
+  }
+
+  class StandardPricing {
+    + computeRate() : dailyRate * days
+  }
+
+  class StaffPricing {
+    + computeRate() : dailyRate * days
+  }
+
+  class FinalYearStudentDiscountPricing {
+    + computeRate() : dailyRate * days
+  }
+
+  PricingPolicy <|.. StandardPricing
+  PricingPolicy <|.. StaffPricing
+  PricingPolicy <|.. FinalYearStudentDiscountPricing
+}
+
+' ============================================================
+' PENALTY
+' ============================================================
+package "model.penalty" {
+
+  interface PenaltyRule {
+    + computeDamagePenalty(severity:DamageSeverity) : double
+  }
+
+  class DamagePenalty {
+    + fixedAmount(s:DamageSeverity) : double
+  }
+
+  class LateReturnPenalty {
+    + computeLatePenalty(e:Equipment, lateDays:int) : double
+  }
+
+  enum DamageSeverity {
+    NONE
+    LIGHT  -> RM 10
+    MODERATE -> RM 100
+    HEAVY -> RM 1000
+  }
+
+  PenaltyRule <|.. DamagePenalty
+  LateReturnPenalty ..> Equipment : uses
+  LateReturnPenalty ..> EquipmentCategory : uses
+  DamagePenalty ..> DamageSeverity : uses
+}
+
+' ============================================================
+' RENTAL
+' ============================================================
 package "model.rental" {
+
   class Rental {
-    - rentalId: String
-    - user: User
-    - equipment: Equipment
-    - rentalDays: int
-    - rentalDate: LocalDate
-    - dueDate: LocalDate
-    - actualReturnDate: LocalDate
-    - status: RentalStatus
-    - reportedSeverity: DamageSeverity
-    - finalSeverity: DamageSeverity
-    - bill: Bill
-    + getLateDays(): int
+    - rentalId : String
+    - user : User
+    - equipment : Equipment
+    - rentalDays : int
+    - rentalDate : LocalDate
+    - dueDate : LocalDate
+    - actualReturnDate : LocalDate
+    - status : RentalStatus
+    - reportedSeverity : DamageSeverity
+    - finalSeverity : DamageSeverity
+    - bill : Bill
+    + getLateDays() : int
   }
 
   enum RentalStatus {
@@ -137,55 +193,233 @@ package "model.rental" {
     APPROVED
     REJECTED
   }
+
+  Rental --> User
+  Rental --> Equipment
+  Rental --> RentalStatus
+  Rental --> DamageSeverity
+  Rental --> Bill : 0..1
 }
 
+' ============================================================
+' BILLING  (Singleton + Façade: BillCalculator)
+' ============================================================
 package "model.billing" {
+
   class Bill {
-    - billId: String
-    - rental: Rental
-    - equipmentName: String
-    - renterName: String
-    - pricingPlan: String
-    - subtotal: double
-    - discount: double
-    - latePenalty: double
-    - damagePenalty: double
-    - netPayable: double
+    - billId : String
+    - rentalId : String
+    - equipmentName : String
+    - renterName : String
+    - pricingPlan : String
+    - subtotal : double
+    - discount : double
+    - latePenalty : double
+    - damagePenalty : double
+    - netPayable : double
   }
 
-  class BillCalculator {
-    + calculate(...): Bill
+  class BillCalculator <<Singleton>> {
+    - instance : BillCalculator
+    - damagePenalty : DamagePenalty
+    - lateReturnPenalty : LateReturnPenalty
+    + getInstance() : BillCalculator
+    + calculate(...) : Bill
   }
+
+  Bill --> Rental : rental
+  BillCalculator ..> Bill : creates
+  BillCalculator ..> Equipment : uses
+  BillCalculator ..> User : uses
+  BillCalculator --> DamagePenalty
+  BillCalculator --> LateReturnPenalty
 }
 
-Equipment <|-- Electronics
-Equipment <|-- MediaEquipment
-Equipment <|-- LaboratoryEquipment
+' ============================================================
+' SERVICE LAYER  (Singleton services - Façade for repos)
+' ============================================================
+package "service" {
 
-Equipment o-- PricingPolicy
-Equipment o-- PenaltyRule
+  class AuthService <<Singleton>> {
+    - currentUser : User
+    + authenticate(id,pwd) : User
+    + logout()
+    + isStaff() : boolean
+  }
 
-Equipment --> EquipmentStatus
-Equipment --> EquipmentCategory
+  class EquipmentService <<Singleton>> {
+    + createEquipment(...) : String
+    + updateEquipment(...) : String
+    + deleteEquipment(id) : String
+    + activateEquipment(id) : String
+    + markAsRepaired(id) : String
+    + canEditEquipment(id) : String
+    + getEquipment(id) : Equipment
+    + getAllEquipment() : List<Equipment>
+  }
 
-PricingPolicy <|.. StandardPricing
-PricingPolicy <|.. FinalYearStudentDiscountPricing
-PricingPolicy <|.. StaffPricing
+  class RentalService <<Singleton>> {
+    + rentEquipment(id,u,days) : String
+    + submitReturnRequest(id,severity) : String
+    + getAvailableEquipment() : List<Equipment>
+    + getUserRentals(u) : List<Rental>
+  }
 
-PenaltyRule <|.. DamagePenalty
+  class ApprovalService <<Singleton>> {
+    + getPendingApprovals() : List<Rental>
+    + approveReturn(id, severity) : String
+    + rejectReturn(id) : String
+  }
 
-User <|-- StudentUser
-User <|-- FinalYearStudentUser
-User <|-- StaffUser
+  class UserService <<Singleton>> {
+    + createUser(id,name,pwd,role) : String
+    + updateUser(id,name,pwd) : String
+    + inactivateUser(id) : String
+    + activateUser(id) : String
+  }
 
-User --> UserRole
+  AuthService ..> User
+  AuthService --> UserRepository
+  EquipmentService --> EquipmentRepository
+  EquipmentService --> RentalRepository
+  RentalService --> EquipmentRepository
+  RentalService --> RentalRepository
+  ApprovalService --> RentalRepository
+  ApprovalService --> BillRepository
+  ApprovalService --> EquipmentRepository
+  ApprovalService --> BillCalculator
+  UserService --> UserRepository
+  UserService --> RentalRepository
+}
 
-Rental --> User
-Rental --> Equipment
-Rental --> RentalStatus
-Rental --> DamageSeverity
-Rental --> Bill
+' ============================================================
+' REPOSITORY LAYER  (Singletons - data access)
+' ============================================================
+package "repo" {
 
-Bill --> Rental
+  class DatabaseManager <<Singleton>> {
+    - connection : Connection
+    + getConnection() : Connection
+  }
+
+  class UserRepository <<Singleton>> {
+    + addUser(u)
+    + getUser(id) : User
+    + getAllUsers() : List<User>
+    + findByUserIdAndPassword(...) : User
+    + updateUser(u)
+  }
+
+  class EquipmentRepository <<Singleton>> {
+    + addEquipment(e)
+    + getEquipment(id) : Equipment
+    + getAvailableEquipment() : List<Equipment>
+    + searchEquipment(kw) : List<Equipment>
+    + updateEquipment(e)
+    + updateStatus(id,s)
+  }
+
+  class RentalRepository <<Singleton>> {
+    + generateRentalId() : String
+    + addRental(r)
+    + getRental(id) : Rental
+    + getAllRentals() : List<Rental>
+    + getRentalsByUser(u) : List<Rental>
+    + updateRental(r)
+  }
+
+  class BillRepository <<Singleton>> {
+    + generateBillId() : String
+    + addBill(b)
+    + getAllBills() : List<Bill>
+    + getBillsByUser(u) : List<Bill>
+  }
+
+  UserRepository --> DatabaseManager
+  EquipmentRepository --> DatabaseManager
+  RentalRepository --> DatabaseManager
+  BillRepository --> DatabaseManager
+  UserRepository ..> User
+  EquipmentRepository ..> Equipment
+  RentalRepository ..> Rental
+  BillRepository ..> Bill
+}
+
+' ============================================================
+' GUI LAYER  (Swing views - depend on services only)
+' ============================================================
+package "gui" {
+
+  class LoginFrame <<JFrame>> {
+    + performLogin()
+  }
+
+  class MainFrame <<JFrame>> {
+    - tabbedPane : JTabbedPane
+    + performLogout()
+  }
+
+  class EquipmentPanel
+  class RentalPanel
+  class MyRentalsPanel
+  class SubmitReturnPanel
+  class MyBillsPanel
+  class ApprovalPanel
+  class EquipmentAdminPanel
+  class UserAdminPanel
+  class BillingHistoryPanel
+
+  LoginFrame ..> AuthService
+  MainFrame "1" *-- "many" EquipmentPanel
+  MainFrame "1" *-- "many" RentalPanel
+  MainFrame "1" *-- "many" MyRentalsPanel
+  MainFrame "1" *-- "many" SubmitReturnPanel
+  MainFrame "1" *-- "many" MyBillsPanel
+  MainFrame "1" *-- "many" ApprovalPanel
+  MainFrame "1" *-- "many" EquipmentAdminPanel
+  MainFrame "1" *-- "many" UserAdminPanel
+  MainFrame "1" *-- "many" BillingHistoryPanel
+  MainFrame --> User : currentUser
+  EquipmentPanel --> EquipmentService
+  RentalPanel --> RentalService
+  MyRentalsPanel --> RentalService
+  SubmitReturnPanel --> RentalService
+  MyBillsPanel --> RentalService
+  ApprovalPanel --> ApprovalService
+  EquipmentAdminPanel --> EquipmentService
+  UserAdminPanel --> UserService
+  BillingHistoryPanel --> ApprovalService
+}
+
+' ============================================================
+' Design Pattern Annotations
+' ============================================================
+note as N1
+  Strategy Pattern: PricingPolicy / PenaltyRule
+  ------------------------------------------
+  New pricing policy = new class implementing
+  PricingPolicy -> injected into Equipment.
+  New penalty rule = new class implementing
+  PenaltyRule -> injected into Equipment.
+end note
+
+note as N2
+  Singleton Pattern
+  ------------------------------------------
+  DatabaseManager, all Repositories, all
+  Services and BillCalculator use the
+  private-constructor + getInstance()
+  idiom so the whole app shares one
+  instance per process.
+end note
+
+note as N3
+  Façade Pattern
+  ------------------------------------------
+  *Service classes and BillCalculator
+  hide the complexity of the repository
+  layer + multiple Strategy objects
+  behind a single, simple API.
+end note
 
 @enduml

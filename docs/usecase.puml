@@ -1,68 +1,98 @@
-@startuml
-
-title Campus Equipment Rental System - Use Case Diagram
+@startuml usecase
 
 left to right direction
+skinparam packageStyle rectangle
+skinparam actorStyle awesome
+skinparam usecaseBackgroundColor #E8F1FB
+skinparam usecaseBorderColor #2E5C8A
+skinparam rectangleBackgroundColor #FAFAFA
+skinparam rectangleBorderColor #555
 
-actor Student as S
-actor FinalYearStudent as FYP
-actor Staff as ST
+title Smart Equipment Rental & Billing System - Use Case Diagram
 
-package "Common Functions" {
-  usecase "Login" as UC1
-  usecase "Browse Equipment" as UC2
-  usecase "Search Equipment" as UC3
-  usecase "View My Rentals" as UC4
-  usecase "View My Bills" as UC5
+actor "Student" as S
+actor "Staff / Admin" as ST
+
+rectangle "Smart Equipment Rental & Billing System" {
+
+  ' ===== Authentication =====
+  usecase "UC01 : Login" as UC01
+  usecase "UC02 : Logout" as UC02
+
+  ' ===== Equipment Management =====
+  usecase "UC03 : Browse Equipment\nCatalog" as UC03
+  usecase "UC04 : Search Equipment" as UC04
+  usecase "UC05 : Create New Equipment" as UC05
+  usecase "UC06 : Edit Equipment Details" as UC06
+  usecase "UC07 : Inactivate /\nActivate Equipment" as UC07
+  usecase "UC08 : Mark Equipment\nas Repaired" as UC08
+
+  ' ===== Rental Management =====
+  usecase "UC09 : Rent Equipment" as UC09
+  usecase "UC10 : View My Rentals" as UC10
+  usecase "UC11 : Submit Return Request\n(with damage report)" as UC11
+  usecase "UC12 : Approve / Reject\nReturn Request" as UC12
+
+  ' ===== Billing =====
+  usecase "UC13 : View My Bills" as UC13
+  usecase "UC14 : View All Bills\n(Billing History)" as UC14
+
+  ' ===== User Administration =====
+  usecase "UC15 : Create User Account" as UC15
+  usecase "UC16 : Update User Account" as UC16
+  usecase "UC17 : Inactivate /\nActivate User" as UC17
+
+  ' ===== Cross-cutting =====
+  usecase "UC18 : Calculate Bill\n(base + discount + penalties)" as UC18
+  usecase "UC19 : Apply Pricing Policy" as UC19
+  usecase "UC20 : Apply Penalty Rules\n(late / damage)" as UC20
 }
 
-package "Student/FYP Functions" {
-  usecase "Rent Equipment" as UC6
-  usecase "Submit Return Request" as UC7
-  usecase "Report Damage Severity" as UC8
-}
+' ===== Student associations =====
+S --> UC01
+S --> UC02
+S --> UC03
+S --> UC04
+S --> UC09
+S --> UC10
+S --> UC11
+S --> UC13
 
-package "Staff Functions" {
-  usecase "Approve Return" as UC9
-  usecase "Reject Return" as UC10
-  usecase "Manage Equipment" as UC11
-  usecase "Manage Users" as UC12
-  usecase "View All Bills" as UC13
-}
-
-S --> UC1
-FYP --> UC1
-ST --> UC1
-
-S --> UC2
-FYP --> UC2
-ST --> UC2
-
-S --> UC3
-FYP --> UC3
-ST --> UC3
-
-S --> UC4
-FYP --> UC4
-ST --> UC4
-
-S --> UC5
-FYP --> UC5
-ST --> UC5
-
-S --> UC6
-FYP --> UC6
-
-S --> UC7
-FYP --> UC7
-
-S --> UC8
-FYP --> UC8
-
-ST --> UC9
-ST --> UC10
-ST --> UC11
+' ===== Staff associations (Staff inherits Student privileges + admin tasks) =====
+ST --|> S
+ST --> UC05
+ST --> UC06
+ST --> UC07
+ST --> UC08
 ST --> UC12
-ST --> UC13
+ST --> UC14
+ST --> UC15
+ST --> UC16
+ST --> UC17
+
+' ===== Use-case relationships (include / extend) =====
+UC09 ..> UC03 : <<extend>>\n[browse to select]
+UC09 ..> UC18 : <<include>>
+UC11 ..> UC20 : <<include>>
+UC12 ..> UC18 : <<include>>\n[on approve -> generate bill]
+UC05 ..> UC19 : <<include>>
+UC06 ..> UC19 : <<include>>
+UC18 ..> UC19 : <<include>>
+UC18 ..> UC20 : <<include>>
+
+note right of UC12
+  Only Staff can approve / reject
+  return requests. A successful
+  approve triggers UC18 (bill
+  generation) and updates
+  equipment status.
+end note
+
+note right of UC18
+  Bill = subtotal
+        - discount (user role)
+        + late penalty (category)
+        + damage penalty (severity)
+end note
 
 @enduml

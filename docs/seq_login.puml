@@ -1,25 +1,43 @@
-@startuml
+@startuml seq_login
 
-title Campus Equipment Rental System - Sequence Diagram: Login
+title Sequence Diagram - Login
 
-actor User
-participant ":LoginFrame" as LoginUI
-participant ":AuthService" as AuthSvc
-participant ":UserRepository" as UserRepo
+skinparam sequenceArrowThickness 2
+skinparam BoxPadding 10
+skinparam ParticipantPadding 10
 
-User -> LoginUI: Enter credentials
-LoginUI -> AuthSvc: authenticate(userId, password)
-AuthSvc -> UserRepo: findByUserIdAndPassword(userId, password)
-alt credentials valid
-  UserRepo --> AuthSvc: return User
-  AuthSvc --> LoginUI: return User
-  LoginUI -> LoginUI: dispose()
-  LoginUI -> MainFrame: create(currentUser)
-  LoginUI -> User: show MainFrame
-else credentials invalid
-  UserRepo --> AuthSvc: return null
-  AuthSvc --> LoginUI: return null
-  LoginUI -> User: show error message
+actor "User\n(Student / Staff)" as U
+participant "LoginFrame" as LF
+participant "AuthService" as AS
+participant "UserRepository" as UR
+participant "User\n(StudentUser /\nStaffUser / FYP)" as USR
+participant "MainFrame" as MF
+
+U -> LF : enter userId + password
+activate LF
+LF -> LF : validate non-empty input
+LF -> AS : authenticate(userId, password)
+activate AS
+AS -> UR : findByUserIdAndPassword(userId, password)
+activate UR
+UR -> UR : SELECT * FROM users WHERE user_id=? AND password=?
+UR --> AS : ResultSet row / null
+deactivate UR
+
+alt credentials match AND status = ACTIVE
+  AS -> USR : new StudentUser / StaffUser /\n FinalYearStudentUser(role)
+  AS -> AS : currentUser = user
+  AS --> LF : return User
+  LF -> LF : dispose()
+  LF -> MF : new MainFrame(user).setVisible(true)
+  activate MF
+  MF --> U : show tabbed UI
+else invalid credentials OR INACTIVE
+  AS --> LF : return null
+  LF --> U : show error dialog
 end
+
+deactivate AS
+deactivate MF
 
 @enduml

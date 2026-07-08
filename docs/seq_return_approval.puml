@@ -1,41 +1,90 @@
-@startuml
+@startuml seq_return_approval
 
-title Campus Equipment Rental System - Sequence Diagram: Return Approval
+title Sequence Diagram - Submit Return & Approve (with Billing)
 
-actor Student
-participant ":SubmitReturnPanel" as ReturnUI
-participant ":RentalService" as RentalSvc
-participant ":ApprovalPanel" as ApprovalUI
-participant ":ApprovalService" as ApprovalSvc
-participant ":BillCalculator" as BillCalc
-participant ":BillRepository" as BillRepo
-participant ":EquipmentRepository" as EquipRepo
+skinparam sequenceArrowThickness 2
+skinparam BoxPadding 10
+skinparam ParticipantPadding 10
 
-Student -> ReturnUI: Select rental, choose severity
-ReturnUI -> RentalSvc: submitReturnRequest(rentalId)
-RentalSvc -> ReturnUI: "SUCCESS"
-ReturnUI -> Student: Show confirmation
+' ===== Phase 1: Student submits return =====
+actor "Student" as S
+participant "SubmitReturnPanel" as SRP
+participant "RentalService" as RS
+participant "RentalRepository" as RR
 
-== Staff Approval Process ==
+S -> SRP : pick rental + damage severity
+activate SRP
+SRP -> RS : submitReturnRequest(rentalId, severity)
+activate RS
+RS -> RR : getRental(rentalId)
+activate RR
+RR --> RS : Rental
+deactivate RR
+RS -> RS : validate status == ACTIVE or REJECTED\nrental.setReportedSeverity(severity)\nrental.setStatus(RETURN_REQUESTED)
+RS -> RR : updateRental(rental)
+activate RR
+RR -> RR : UPDATE rentals SET status=?, reported_severity=?
+RR --> RS : ok
+deactivate RR
+RS --> SRP : "SUCCESS"
+SRP --> S : request submitted, awaiting staff
+deactivate RS
+deactivate SRP
 
-actor Staff
-Staff -> ApprovalUI: View pending approvals
-ApprovalUI -> ApprovalSvc: getPendingApprovals()
-ApprovalSvc --> ApprovalUI: List<Rental>
+' ===== Phase 2: Staff approves -> bill is generated =====
+actor "Staff" as ST
+participant "ApprovalPanel" as AP
+participant "ApprovalService" as AS
+participant "BillRepository" as BR
+participant "BillCalculator" as BC
+participant "EquipmentRepository" as ER
+participant "Rental" as R
+participant "Bill" as B
 
-Staff -> ApprovalUI: Select rental, click Approve
-ApprovalUI -> ApprovalUI: Show severity selector dialog
-Staff -> ApprovalUI: Confirm severity (may modify)
-ApprovalUI -> ApprovalSvc: approveReturn(rentalId, severity)
+ST -> AP : select pending rental + confirm severity
+activate AP
+AP -> AS : approveReturn(rentalId, severity)
+activate AS
+AS -> RR : getRental(rentalId)
+RR --> AS : Rental (status = RETURN_REQUESTED)
+AS -> R : setActualReturnDate(today)\nsetFinalSeverity(severity)\nsetStatus(APPROVED)
 
-ApprovalSvc -> BillCalc: calculate(rental, equipment, user, severity)
-BillCalc --> ApprovalSvc: return Bill
+AS -> BR : generateBillId()
+activate BR
+BR -> BR : UPDATE counters SET counter_value=+1
+BR --> AS : "B-YYYY-NNNN"
+deactivate BR
 
-ApprovalSvc -> BillRepo: addBill(bill)
-ApprovalSvc -> EquipRepo: updateStatus(DAMAGED) if severity != NONE
-ApprovalSvc -> EquipRepo: updateStatus(AVAILABLE) if severity == NONE
+AS -> BC : calculate(billId, rental, equipment, user, severity)
+activate BC
+BC -> BC : subtotal = equipment.calculateRentalFee(days)
+BC -> BC : discount = user.getDiscountRate() * subtotal
+BC -> BC : lateDays = days between dueDate & actualReturnDate
+BC -> BC : latePenalty = LateReturnPenalty.computeLatePenalty(equipment, lateDays)
+BC -> BC : damagePenalty = DamagePenalty.computeDamagePenalty(severity)
+BC -> B : new Bill(...)\nnetPayable = subtotal - discount + late + damage
+BC --> AS : Bill
+deactivate BC
 
-ApprovalSvc --> ApprovalUI: "SUCCESS"
-ApprovalUI -> Staff: Show success message
+AS -> R : rental.setBill(bill)
+AS -> BR : addBill(bill)
+activate BR
+BR -> BR : INSERT INTO bills (...)
+BR --> AS : ok
+deactivate BR
+
+AS -> RR : updateRental(rental)
+RR -> RR : UPDATE rentals SET status=APPROVED, ...
+
+alt severity == NONE
+  AS -> ER : updateStatus(equipmentId, AVAILABLE)
+else severity != NONE
+  AS -> ER : updateStatus(equipmentId, DAMAGED)
+end
+
+AS --> AP : "SUCCESS"
+AP --> ST : bill generated, equipment status updated
+deactivate AS
+deactivate AP
 
 @enduml
