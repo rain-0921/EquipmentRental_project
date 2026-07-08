@@ -125,6 +125,11 @@ public class EquipmentService {
             return "Equipment is already inactive";
         }
 
+        if (equipment.getStatus() != EquipmentStatus.AVAILABLE
+            && equipment.getStatus() != EquipmentStatus.DAMAGED) {
+            return "Cannot inactivate equipment that is currently rented. Please wait for it to be returned first.";
+        }
+
         if (rentalRepository.hasActiveRentalForEquipment(equipmentId)) {
             return "Cannot inactivate equipment with active rentals";
         }
