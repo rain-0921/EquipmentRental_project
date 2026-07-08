@@ -1,12 +1,5 @@
 package rental.model.user;
 
-/**
- * Singleton factory that builds the right User for each UserRole.
- * The original StudentUser / FinalYearStudentUser / StaffUser hierarchy
- * (Template Method pattern) was removed in favour of a single User class
- * with a discountRate field, instantiated here so the discount policy
- * lives in one place.
- */
 public class UserFactory {
     private static UserFactory instance;
 
