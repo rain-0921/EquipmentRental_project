@@ -47,7 +47,7 @@ public class BillCalculator {
         double damagePenaltyAmount = damagePenalty.computeDamagePenalty(severity);
 
         return new Bill(billId, rental, equipment, user,
-                       equipment.getPlanName(),
+                       user.getPlanName(),
                        subtotal, discount, latePenalty, damagePenaltyAmount);
     }
 }

@@ -40,4 +40,8 @@ public abstract class User {
     }
 
     public abstract double getDiscountRate();
+
+    public String getPlanName() {
+        return "Standard (0% off)";
+    }
 }

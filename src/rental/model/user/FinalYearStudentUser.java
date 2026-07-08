@@ -10,4 +10,9 @@ public class FinalYearStudentUser extends StudentUser {
     public double getDiscountRate() {
         return 0.15;
     }
+
+    @Override
+    public String getPlanName() {
+        return "FYP Discount (15% off total)";
+    }
 }

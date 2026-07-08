@@ -10,6 +10,11 @@ public class StaffUser extends User {
         return 0.20;
     }
 
+    @Override
+    public String getPlanName() {
+        return "Staff Discount (20% off final)";
+    }
+
     public boolean isStaff() {
         return true;
     }
