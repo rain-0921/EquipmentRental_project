@@ -1,0 +1,31 @@
+@startuml
+
+title Campus Equipment Rental System - Sequence Diagram: Rent Equipment
+
+actor Student
+participant ":RentalPanel" as RentalUI
+participant ":RentalService" as RentalSvc
+participant ":EquipmentRepository" as EquipRepo
+participant ":RentalRepository" as RentRepo
+participant ":Rental" as Rental
+
+Student -> RentalUI: Enter equipment ID and days
+RentalUI -> RentalSvc: rentEquipment(equipmentId, user, days)
+RentalSvc -> EquipRepo: getEquipment(equipmentId)
+alt equipment exists and available
+  EquipRepo --> RentalSvc: return Equipment
+  RentalSvc -> RentRepo: generateRentalId()
+  RentRepo --> RentalSvc: return rentalId
+  RentalSvc -> Rental: create(rentalId, user, equipment, days)
+  Rental --> RentalSvc: return Rental
+  RentalSvc -> RentRepo: addRental(rental)
+  RentalSvc -> EquipRepo: updateStatus(RENTED)
+  RentalSvc --> RentalUI: "SUCCESS:rentalId"
+  RentalUI -> Student: show success message
+else equipment not available
+  EquipRepo --> RentalSvc: return null or not AVAILABLE
+  RentalSvc --> RentalUI: error message
+  RentalUI -> Student: show error
+end
+
+@enduml

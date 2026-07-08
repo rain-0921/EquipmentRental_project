@@ -1,0 +1,25 @@
+@startuml
+
+title Campus Equipment Rental System - Sequence Diagram: Login
+
+actor User
+participant ":LoginFrame" as LoginUI
+participant ":AuthService" as AuthSvc
+participant ":UserRepository" as UserRepo
+
+User -> LoginUI: Enter credentials
+LoginUI -> AuthSvc: authenticate(userId, password)
+AuthSvc -> UserRepo: findByUserIdAndPassword(userId, password)
+alt credentials valid
+  UserRepo --> AuthSvc: return User
+  AuthSvc --> LoginUI: return User
+  LoginUI -> LoginUI: dispose()
+  LoginUI -> MainFrame: create(currentUser)
+  LoginUI -> User: show MainFrame
+else credentials invalid
+  UserRepo --> AuthSvc: return null
+  AuthSvc --> LoginUI: return null
+  LoginUI -> User: show error message
+end
+
+@enduml

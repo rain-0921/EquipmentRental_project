@@ -1,0 +1,191 @@
+@startuml
+
+title Campus Equipment Rental System - Class Diagram
+
+skinparam classAttributeIconSize 0
+
+package "model.equipment" {
+  abstract class Equipment {
+    - equipmentId: String
+    - name: String
+    - description: String
+    - category: EquipmentCategory
+    - status: EquipmentStatus
+    - dailyRate: double
+    - pricingPolicy: PricingPolicy
+    - penaltyRule: PenaltyRule
+    + calculateRentalFee(days: int): double
+    + getPlanName(): String
+  }
+
+  enum EquipmentStatus {
+    AVAILABLE
+    RENTED
+    DAMAGED
+  }
+
+  enum EquipmentCategory {
+    ELECTRONICS
+    MEDIA
+    LABORATORY
+    + lateFeePerDay(): double
+  }
+
+  class Electronics {
+    + Electronics(id, name, desc, rate, policy, penalty)
+  }
+
+  class MediaEquipment {
+    + MediaEquipment(id, name, desc, rate, policy, penalty)
+  }
+
+  class LaboratoryEquipment {
+    + LaboratoryEquipment(id, name, desc, rate, policy, penalty)
+  }
+}
+
+package "model.pricing" {
+  interface PricingPolicy {
+    + computeRate(equipment: Equipment, days: int): double
+    + planName(): String
+  }
+
+  class StandardPricing {
+    + computeRate(equipment: Equipment, days: int): double
+    + planName(): String
+  }
+
+  class FinalYearStudentDiscountPricing {
+    + computeRate(equipment: Equipment, days: int): double
+    + planName(): String
+  }
+
+  class StaffPricing {
+    + computeRate(equipment: Equipment, days: int): double
+    + planName(): String
+  }
+}
+
+package "model.penalty" {
+  enum DamageSeverity {
+    NONE
+    LIGHT
+    MODERATE
+    HEAVY
+  }
+
+  interface PenaltyRule {
+    + computeDamagePenalty(severity: DamageSeverity): double
+  }
+
+  class DamagePenalty {
+    + computeDamagePenalty(severity: DamageSeverity): double
+  }
+
+  class LateReturnPenalty {
+    + computeLatePenalty(equipment: Equipment, lateDays: int): double
+  }
+}
+
+package "model.user" {
+  abstract class User {
+    - userId: String
+    - name: String
+    - password: String
+    - role: UserRole
+    + getDiscountRate(): double {abstract}
+  }
+
+  enum UserRole {
+    STUDENT
+    FINAL_YEAR_STUDENT
+    STAFF
+  }
+
+  class StudentUser {
+    + getDiscountRate(): double
+  }
+
+  class FinalYearStudentUser {
+    + getDiscountRate(): double
+  }
+
+  class StaffUser {
+    + getDiscountRate(): double
+  }
+}
+
+package "model.rental" {
+  class Rental {
+    - rentalId: String
+    - user: User
+    - equipment: Equipment
+    - rentalDays: int
+    - rentalDate: LocalDate
+    - dueDate: LocalDate
+    - actualReturnDate: LocalDate
+    - status: RentalStatus
+    - reportedSeverity: DamageSeverity
+    - finalSeverity: DamageSeverity
+    - bill: Bill
+    + getLateDays(): int
+  }
+
+  enum RentalStatus {
+    ACTIVE
+    RETURN_REQUESTED
+    APPROVED
+    REJECTED
+  }
+}
+
+package "model.billing" {
+  class Bill {
+    - billId: String
+    - rental: Rental
+    - equipmentName: String
+    - renterName: String
+    - pricingPlan: String
+    - subtotal: double
+    - discount: double
+    - latePenalty: double
+    - damagePenalty: double
+    - netPayable: double
+  }
+
+  class BillCalculator {
+    + calculate(...): Bill
+  }
+}
+
+Equipment <|-- Electronics
+Equipment <|-- MediaEquipment
+Equipment <|-- LaboratoryEquipment
+
+Equipment o-- PricingPolicy
+Equipment o-- PenaltyRule
+
+Equipment --> EquipmentStatus
+Equipment --> EquipmentCategory
+
+PricingPolicy <|.. StandardPricing
+PricingPolicy <|.. FinalYearStudentDiscountPricing
+PricingPolicy <|.. StaffPricing
+
+PenaltyRule <|.. DamagePenalty
+
+User <|-- StudentUser
+User <|-- FinalYearStudentUser
+User <|-- StaffUser
+
+User --> UserRole
+
+Rental --> User
+Rental --> Equipment
+Rental --> RentalStatus
+Rental --> DamageSeverity
+Rental --> Bill
+
+Bill --> Rental
+
+@enduml

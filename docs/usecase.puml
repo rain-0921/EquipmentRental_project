@@ -1,0 +1,68 @@
+@startuml
+
+title Campus Equipment Rental System - Use Case Diagram
+
+left to right direction
+
+actor Student as S
+actor FinalYearStudent as FYP
+actor Staff as ST
+
+package "Common Functions" {
+  usecase "Login" as UC1
+  usecase "Browse Equipment" as UC2
+  usecase "Search Equipment" as UC3
+  usecase "View My Rentals" as UC4
+  usecase "View My Bills" as UC5
+}
+
+package "Student/FYP Functions" {
+  usecase "Rent Equipment" as UC6
+  usecase "Submit Return Request" as UC7
+  usecase "Report Damage Severity" as UC8
+}
+
+package "Staff Functions" {
+  usecase "Approve Return" as UC9
+  usecase "Reject Return" as UC10
+  usecase "Manage Equipment" as UC11
+  usecase "Manage Users" as UC12
+  usecase "View All Bills" as UC13
+}
+
+S --> UC1
+FYP --> UC1
+ST --> UC1
+
+S --> UC2
+FYP --> UC2
+ST --> UC2
+
+S --> UC3
+FYP --> UC3
+ST --> UC3
+
+S --> UC4
+FYP --> UC4
+ST --> UC4
+
+S --> UC5
+FYP --> UC5
+ST --> UC5
+
+S --> UC6
+FYP --> UC6
+
+S --> UC7
+FYP --> UC7
+
+S --> UC8
+FYP --> UC8
+
+ST --> UC9
+ST --> UC10
+ST --> UC11
+ST --> UC12
+ST --> UC13
+
+@enduml

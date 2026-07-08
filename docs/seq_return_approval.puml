@@ -1,0 +1,41 @@
+@startuml
+
+title Campus Equipment Rental System - Sequence Diagram: Return Approval
+
+actor Student
+participant ":SubmitReturnPanel" as ReturnUI
+participant ":RentalService" as RentalSvc
+participant ":ApprovalPanel" as ApprovalUI
+participant ":ApprovalService" as ApprovalSvc
+participant ":BillCalculator" as BillCalc
+participant ":BillRepository" as BillRepo
+participant ":EquipmentRepository" as EquipRepo
+
+Student -> ReturnUI: Select rental, choose severity
+ReturnUI -> RentalSvc: submitReturnRequest(rentalId)
+RentalSvc -> ReturnUI: "SUCCESS"
+ReturnUI -> Student: Show confirmation
+
+== Staff Approval Process ==
+
+actor Staff
+Staff -> ApprovalUI: View pending approvals
+ApprovalUI -> ApprovalSvc: getPendingApprovals()
+ApprovalSvc --> ApprovalUI: List<Rental>
+
+Staff -> ApprovalUI: Select rental, click Approve
+ApprovalUI -> ApprovalUI: Show severity selector dialog
+Staff -> ApprovalUI: Confirm severity (may modify)
+ApprovalUI -> ApprovalSvc: approveReturn(rentalId, severity)
+
+ApprovalSvc -> BillCalc: calculate(rental, equipment, user, severity)
+BillCalc --> ApprovalSvc: return Bill
+
+ApprovalSvc -> BillRepo: addBill(bill)
+ApprovalSvc -> EquipRepo: updateStatus(DAMAGED) if severity != NONE
+ApprovalSvc -> EquipRepo: updateStatus(AVAILABLE) if severity == NONE
+
+ApprovalSvc --> ApprovalUI: "SUCCESS"
+ApprovalUI -> Staff: Show success message
+
+@enduml
