@@ -174,15 +174,23 @@ public class EquipmentAdminPanel extends JPanel {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBorder(BorderFactory.createEmptyBorder(20, 25, 20, 25));
 
-        JTextField idField = new JTextField();
+        JLabel idPreviewLabel = new JLabel();
+        idPreviewLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        idPreviewLabel.setForeground(new Color(0, 123, 255));
+
         JTextField nameField = new JTextField();
         JTextField descField = new JTextField();
         JComboBox<EquipmentCategory> categoryCombo = new JComboBox<>(EquipmentCategory.values());
         JTextField rateField = new JTextField();
 
-        idField.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(206, 212, 218)),
-            BorderFactory.createEmptyBorder(5, 8, 5, 8)));
+        Runnable updateIdPreview = () -> {
+            EquipmentCategory selected = (EquipmentCategory) categoryCombo.getSelectedItem();
+            String previewId = equipmentService.generateNextId(selected);
+            idPreviewLabel.setText("Auto-generated ID: " + previewId);
+        };
+        categoryCombo.addActionListener(e -> updateIdPreview.run());
+        updateIdPreview.run();
+
         nameField.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createLineBorder(new Color(206, 212, 218)),
             BorderFactory.createEmptyBorder(5, 8, 5, 8)));
@@ -193,7 +201,7 @@ public class EquipmentAdminPanel extends JPanel {
             BorderFactory.createLineBorder(new Color(206, 212, 218)),
             BorderFactory.createEmptyBorder(5, 8, 5, 8)));
 
-        addLabeledField(panel, "Equipment ID:", idField);
+        addLabeledField(panel, "", idPreviewLabel);
         addLabeledField(panel, "Name:", nameField);
         addLabeledField(panel, "Description:", descField);
         addLabeledField(panel, "Category:", categoryCombo);
@@ -211,7 +219,6 @@ public class EquipmentAdminPanel extends JPanel {
         saveButton.addActionListener(e -> {
             try {
                 String result = equipmentService.createEquipment(
-                    idField.getText().trim(),
                     nameField.getText().trim(),
                     descField.getText().trim(),
                     (EquipmentCategory) categoryCombo.getSelectedItem(),
@@ -264,8 +271,9 @@ public class EquipmentAdminPanel extends JPanel {
 
         JTextField nameField = new JTextField(eq.getName());
         JTextField descField = new JTextField(eq.getDescription());
-        JComboBox<EquipmentCategory> categoryCombo = new JComboBox<>(EquipmentCategory.values());
-        categoryCombo.setSelectedItem(eq.getCategory());
+        JLabel categoryLabel = new JLabel(eq.getCategory().name());
+        categoryLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        categoryLabel.setForeground(new Color(33, 37, 41));
         JTextField rateField = new JTextField(String.valueOf(eq.getDailyRate()));
 
         nameField.setBorder(BorderFactory.createCompoundBorder(
@@ -285,7 +293,7 @@ public class EquipmentAdminPanel extends JPanel {
         addLabeledField(panel, "", idLabel);
         addLabeledField(panel, "Name:", nameField);
         addLabeledField(panel, "Description:", descField);
-        addLabeledField(panel, "Category:", categoryCombo);
+        addLabeledField(panel, "Category:", categoryLabel);
         addLabeledField(panel, "Daily Rate (RM):", rateField);
 
         JButton saveButton = new JButton("Save Changes");
@@ -303,7 +311,7 @@ public class EquipmentAdminPanel extends JPanel {
                     equipmentId,
                     nameField.getText().trim(),
                     descField.getText().trim(),
-                    (EquipmentCategory) categoryCombo.getSelectedItem(),
+                    eq.getCategory(),
                     Double.parseDouble(rateField.getText().trim())
                 );
                 if (result.equals("SUCCESS")) {

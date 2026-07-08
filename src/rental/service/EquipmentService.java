@@ -32,15 +32,26 @@ public class EquipmentService {
         return instance;
     }
 
-    public String createEquipment(String equipmentId, String name, String description,
+    public String generateNextId(EquipmentCategory category) {
+        String prefix = category.idPrefix();
+        int max = equipmentRepository.getMaxNumericSuffixForPrefix(prefix);
+        return prefix + String.format("%03d", max + 1);
+    }
+
+    public String createEquipment(String name, String description,
                                   EquipmentCategory category, double dailyRate) {
+        String equipmentId = generateNextId(category);
+
         if (equipmentRepository.getEquipment(equipmentId) != null) {
-            return "Equipment ID already exists";
+            String retryId = generateNextId(category);
+            if (!retryId.equals(equipmentId)) {
+                equipmentId = retryId;
+            }
         }
-        
+
         PricingPolicy pricing = new StandardPricing();
         DamagePenalty penalty = new DamagePenalty();
-        
+
         Equipment equipment;
         switch (category) {
             case ELECTRONICS:
@@ -55,7 +66,7 @@ public class EquipmentService {
             default:
                 return "Invalid category";
         }
-        
+
         equipmentRepository.addEquipment(equipment);
         return "SUCCESS";
     }

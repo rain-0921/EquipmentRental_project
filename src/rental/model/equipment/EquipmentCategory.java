@@ -14,4 +14,13 @@ public enum EquipmentCategory {
     public double lateFeePerDay() {
         return lateFeePerDay;
     }
+
+    public String idPrefix() {
+        switch (this) {
+            case ELECTRONICS: return "E";
+            case MEDIA:       return "M";
+            case LABORATORY:  return "L";
+            default:          return "X";
+        }
+    }
 }

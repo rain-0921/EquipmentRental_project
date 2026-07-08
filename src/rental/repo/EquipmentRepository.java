@@ -136,6 +136,21 @@ public class EquipmentRepository {
         }
     }
 
+    public int getMaxNumericSuffixForPrefix(String prefix) {
+        String sql = "SELECT COALESCE(MAX(CAST(SUBSTRING(equipment_id, 2) AS UNSIGNED)), 0) FROM equipment WHERE equipment_id LIKE CONCAT(?, '%')";
+        try (Connection conn = db.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, prefix);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
     public boolean deleteEquipment(String equipmentId) {
         String sql = "DELETE FROM equipment WHERE equipment_id = ?";
         try (Connection conn = db.getConnection();
